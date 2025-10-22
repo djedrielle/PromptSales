@@ -4,6 +4,11 @@
 
 Documentar cada atributo no funcional con valores cuantitativos, parámetros técnicos y tecnologías a usar. Incluir ejemplos claros, abajo se documentan ejemplos de valores y tecnologías, pero ustedes deben diseñar y encontrar sus propios valores los cuales deben estar justificados por alguna teoría o práctica debidamente argumentada y analizada; realizando las extrapolaciones o cálculos que usted pueda diseñar bajo un algoritmo o método cuantitativo diseñado por el grupo mismo. 
 
+Integrantes:
+kskskss
+ksksks
+ksksksk
+
 
 ### Requerimientos No Funcionales (Utilizar estos para desarrollar el Entregable 1)
 
@@ -44,10 +49,37 @@ _Seguridad_
 * Tiempo máximo para resultados cacheados: 200 ms usando Redis.
 * Tecnología: PostgreSQL, Redis; aquí pueden ser métricas por las técnologías clave por separado. 
 
+
+¿Que es lo que más hacen los usuario?
+La operación más intensa es kskksksksk...
+Esto para cada sub empresa.
+
+PromptAds
+
+
+Pivote: el tiempo que toma un read en DB.
+
+Ejemplo:
+Performance (Supuesto)
+Fast + API + Python + SQL Server + REST service
+1000 transacciones duran 1400ms (Fuente: "link"). Cuando se obtiene la info sumarizada de una campaña. Este sería un ejemplo de tiempo para PromptAds.
+
+Si para 1000 transacciones son 1400ms entonces para 100 serían XXX.
+
+El link debe decir las especificaciones de la máquina en la que se hizo. RAM, cores y velocidad de CPU.
+
+Revizar los benchmark de PCMagazine.
+
+
 ### Scalability
 
 * Debe soportar incremento de carga de hasta 10x sin degradación.
 * Kubernetes configurado con autoescalado horizontal por CPU y memoria. Justificarlo con la configuracion de K8s.
+
+Ya sabemos cuanto hardware ocupamos para cumplir con performance, entonces...
+
+Ejemplo:
+Se utilizara kubernetes para contenerización dinámica con un cluster de mínimo X servers con autoscale de tanto. Cada máquina tendrá XXX specs. Aquí está el link al archivo de configuración de kubernetes.
 
 ### Reliability
 
@@ -55,33 +87,71 @@ _Seguridad_
 * Monitoreo con pg_stat_statements y logs centralizados.
 * Es importante determinar como se monitorea y como se notifican alertas. 
 
+"Nivel de confianza en el sistema"
+
+Para este punto ya debemos de saber en qué lo vamos a hacer.
+
+¿En el cloud que escogí qué hay para monitorear alertas?
+
+"Se va a usar el servicio XXX de XXX para el monitoreo de alertas críticas. Estas se van a comunicar por XXX, XXX, XXX otras por email. Se va a permitir un máximo de XXX (inventado) errores al día."
+
 ### Availability
 
 * Disponibilidad mínima: 99.9% mensual. En el diseño de infraestructura debe lograr verse como se logra esto, podría ir en el diagrama de arquitectura, pero sería mejor uno de infraestructura. 
 * Redis y bases de datos con failover y replicación.
 * Considere load balancers. 
 
+Esto se refiere al porcentaje del tiempo que el sistema debería de estar disponible. 98% o 99,7% etc. Existe un ejemplo de esto en el Excel. 
+
 ### Security
 
 * Autenticación: OAuth 2.0 y/o OpenID Connect.
 * Cifrado TLS 1.3 en comunicación y AES-256 en reposo.
+
+¿Cómo voy a hacer el cifrado y la autenticacion?
+
+Primero decidir si va a ser OAuth o OpenID Connect
+
+REST con SSL 
+
+Para cada base de datos averiguo qué cifrado ofrece y selecciono la opción que más me parezca.
+Mongo utiliza XXX cifrado.
+SQL Server XXX cifrado...
 
 ### Maintainability
 
 * Código modular siguiendo DDD y separación de dominios.
 * Documentación en readme.md y comentarios claros en código.
 
+¿Cómo le voy a dar mantenimiento al sistema durante y después?
+
+¿Durante el desarrollo?
+Sisteam de tiquetes, investigar sobre GitFlows, PRs, branching, realease process ("van a utilizar branches conversión promptv{}") habrá un release cada 3 semanas, procedimiento de hotfixes.
+
+¿Después de desarrollo?
+Buscar niveles de soporte L1, L2 y L3. No queremos tener problemas en L3.
+L1: Se le ofrece al usuario manuales y un RAG o bot en WhatsApp que le sirva como asistente a los usuarios.
+L2: Se le ofrece la disponibilidad al usuario por email para que el equipo de support le brinda apoyo.
+L3: Se ofrece medio y tiempo. Un encargado del equipo técnico se conectará con el usuario para brindarle apoyo.
+
 ### Interoperability
 
 * Integración de APIs REST y MCP servers entre subempresas y servicios externos.
+
+
 
 ### Compliance
 
 * Cumplimiento de GDPR en gestión de datos sensibles.
 
+"Todo pago o transferencia se hace con servicio de terceros (paypal, ...)"
+Owasp para pruebas de seguridad web (vulnerabilidades). "Se aceptarán 0 pruebas críticas, XX leves, XX comunes, etc."
+
 ### Extensibility
 
 * Arquitectura modular, permite agregar nuevas subempresas o módulos sin alterar sistemas existentes.
+
+"En futuras versiones se puede extender con REST APIs, MCP servers, se podrían agregar dominios, etc."
 
 ## Domain driven design
 
@@ -94,3 +164,14 @@ Para esto proceda en esta sección a:
 * Diagrama de dominios que muestre dependencias, límites de contexto y flujos de datos.
 * Asegurar independencia entre dominios internos y globales.
 * Esta documentación debe estar debidamente vinculada y guiada por código en el repositorio. 
+
+
+
+El principal motivo de hacer DDD es que cada codimio del negocio pueda mantenerse de forma isolada. Se busca independencia entre los dominios. La clave está en el release, el release de cada dominio debe de ser totalmente independiente y todo debe de funcionar perfectamente. Los equipos de desarrollo se divide en los dominios, estos trabajan totalmente independiente. Se busca aislamiento total.
+
+Se busca definir los parámetros que utilizaremos para clasificar los dominios.
+
+1. Identificar los doiminios: "Haganlos por sub-empresas, hagan la lista que hice en clase que indica lo que abarca cada dominio".
+2. Hacer un diagrama pequeño que indica cómo interactuan los dominios.
+3. Los facades "fachadas" es un ente que se encarga de exponer el dominio. El profe lo clasificó como clases con nombre ---Contract/Facade. Los dominios solo se comunican mediante --Contract/Facades.
+4. Definir qué se va a utilizar para hacer pruebas (Jest) indicar que solamente testean los ---Contract/Facade. 
