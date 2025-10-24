@@ -149,32 +149,9 @@ Owasp para pruebas de seguridad web (vulnerabilidades). "Se aceptarán 0 pruebas
 
 ### Extensibility
 
-* Arquitectura modular, permite agregar nuevas subempresas o módulos sin alterar sistemas existentes.
-
-"En futuras versiones se puede extender con REST APIs, MCP servers, se podrían agregar dominios, etc."
+En futuras versiones el alcance de esta arquitectura se puede extender conectando REST APIs, creando nuevos MCP Servers o incluso acoplando nuevos dominios.
 
 ## Domain driven design
-
-Para esto proceda en esta sección a: 
-
-* Identificar todos los dominios principales por subempresa y dominios globales.
-* Definir contratos entre dominios mediante interfaces o APIs.
-* Crear facades para simplificar la interacción entre subempresas y dominios.
-* Diseñar pruebas unitarias y de integración por dominio.
-* Diagrama de dominios que muestre dependencias, límites de contexto y flujos de datos.
-* Asegurar independencia entre dominios internos y globales.
-* Esta documentación debe estar debidamente vinculada y guiada por código en el repositorio. 
-
-
-El principal motivo de hacer DDD es que cada codimio del negocio pueda mantenerse de forma aislada. Se busca independencia entre los dominios. La clave está en el release, el release de cada dominio debe de ser totalmente independiente y todo debe de funcionar perfectamente. Los equipos de desarrollo se divide en los dominios, estos trabajan totalmente independiente. Se busca aislamiento total.
-
-Se busca definir los parámetros que utilizaremos para clasificar los dominios.
-
-1. Identificar los doiminios: "Haganlos por sub-empresas, hagan la lista que hice en clase que indica lo que abarca cada dominio".
-2. Hacer un diagrama pequeño que indica cómo interactuan los dominios.
-3. Los facades "fachadas" es un ente que se encarga de exponer el dominio. El profe lo clasificó como clases con nombre ---Contract/Facade. Los dominios solo se comunican mediante --Contract/Facades.
-4. Definir qué se va a utilizar para hacer pruebas (Jest) indicar que solamente testean los ---Contract/Facade. 
-
 
 ### PromptContent
 Este dominio se encarga de la creación de contenido textual, audiovisual e imágenes para campañas publicitarias en redes sociales y páginas web. Este contenido es creado de manera automatizada por IA para distintos públicos meta.
