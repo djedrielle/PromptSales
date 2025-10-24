@@ -192,4 +192,4 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 
 Integración con plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, entre otras
 
-[DDD diagram](/diagramDDD.jpg)
+[DDD diagram](diagramDDD.jpg)
