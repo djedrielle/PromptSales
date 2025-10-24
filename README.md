@@ -182,6 +182,17 @@ El dominio PromptAds utiliza este contenido para diseñar y crear campañas.
 
 Integración con plataformas externas como Canva, Adobe, Meta Business Suite y OpenAI API, etc
 
+**Domain list**
+- Text Generation
+- Image Generation
+- Video Generation
+- Campaign generation
+- Culture campaign generation
+- Cloud 
+- Creative Briefing
+- SEO & Adaptation 
+- External Publishing
+
 ### PromptAds
 Este dominio se encarga del diseño, segmentación y publicación de campañas publicitarias en redes sociales, email marketing, SMS, LinkedIn e influencers. También se encarga del análisis en tiempo real del rendimiento de estas campañas. Las campañas son generadas de manera automática a partir de datos de públicos meta y objetivos de venta.
 
