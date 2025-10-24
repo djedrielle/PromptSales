@@ -166,8 +166,7 @@ Para esto proceda en esta sección a:
 * Esta documentación debe estar debidamente vinculada y guiada por código en el repositorio. 
 
 
-
-El principal motivo de hacer DDD es que cada codimio del negocio pueda mantenerse de forma isolada. Se busca independencia entre los dominios. La clave está en el release, el release de cada dominio debe de ser totalmente independiente y todo debe de funcionar perfectamente. Los equipos de desarrollo se divide en los dominios, estos trabajan totalmente independiente. Se busca aislamiento total.
+El principal motivo de hacer DDD es que cada codimio del negocio pueda mantenerse de forma aislada. Se busca independencia entre los dominios. La clave está en el release, el release de cada dominio debe de ser totalmente independiente y todo debe de funcionar perfectamente. Los equipos de desarrollo se divide en los dominios, estos trabajan totalmente independiente. Se busca aislamiento total.
 
 Se busca definir los parámetros que utilizaremos para clasificar los dominios.
 
@@ -175,3 +174,22 @@ Se busca definir los parámetros que utilizaremos para clasificar los dominios.
 2. Hacer un diagrama pequeño que indica cómo interactuan los dominios.
 3. Los facades "fachadas" es un ente que se encarga de exponer el dominio. El profe lo clasificó como clases con nombre ---Contract/Facade. Los dominios solo se comunican mediante --Contract/Facades.
 4. Definir qué se va a utilizar para hacer pruebas (Jest) indicar que solamente testean los ---Contract/Facade. 
+
+
+### PromptContent
+Este dominio se encarga de la creación de contenido textual, audiovisual e imágenes para campañas publicitarias en redes sociales y páginas web. Este contenido es creado de manera automatizada por IA para distintos públicos meta.
+El dominio PromptAds utiliza este contenido para diseñar y crear campañas. 
+
+Integración con plataformas externas como Canva, Adobe, Meta Business Suite y OpenAI API, etc
+
+### PromptAds
+Este dominio se encarga del diseño, segmentación y publicación de campañas publicitarias en redes sociales, email marketing, SMS, LinkedIn e influencers. También se encarga del análisis en tiempo real del rendimiento de estas campañas. Las campañas son generadas de manera automática a partir de datos de públicos meta y objetivos de venta.
+
+Integración con plataformas externas como Google Ads, Meta Ads, TikTok for Business, Mailchimp y plataformas de CRM.
+
+### PromptCrm
+Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
+
+Integración con plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, entre otras
+
+[DDD diagram](/diagramDDD.jpg)
