@@ -154,29 +154,17 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 ## Domain driven design
 
-### PromptContent
-Este dominio se encarga de la creación de contenido textual, audiovisual e imágenes para campañas publicitarias en redes sociales y páginas web. Este contenido es creado de manera automatizada por IA para distintos públicos meta.
-El dominio PromptAds utiliza este contenido para diseñar y crear campañas. 
+### AI and Content Generation Domain
+Este dominio se encarga de la creación de contenido textual, audiovisual e imágenes. También opera y ofrece servicios de IA a otros dominios como `Campaign Management and Analitics` y `Crm`.
 
-Integración con plataformas externas como Canva, Adobe, Meta Business Suite y OpenAI API, etc
-
-**Domain list**
 - Text Generation
 - Image Generation
 - Video Generation
-- Campaign generation
-- Culture campaign generation
-- Cloud 
-- Creative Briefing
-- SEO & Adaptation 
-- External Publishing
+- AI services provider for other domains
 
-### PromptAds
+### Campaign Management and Analitics Domain
 Este dominio se encarga del diseño, segmentación y publicación de campañas publicitarias en redes sociales, email marketing, SMS, LinkedIn e influencers. También se encarga del análisis en tiempo real del rendimiento de estas campañas. Las campañas son generadas de manera automática a partir de datos de públicos meta y objetivos de venta.
 
-Integración con plataformas externas como Google Ads, Meta Ads, TikTok for Business, Mailchimp y plataformas de CRM.
-
-**Domain list**
 - Campaign Planning: Encargado de diseñar la campaña publicitaria a partir del objetivo definido por el cliente. Define los KPIs, canales, formatos y duración de la campaña.
 
 - Targeting: Selecciona el público objetivo al que se mostrará la campaña, segmentando por datos demográficos, comportamiento, intereses y otras variables.
@@ -193,9 +181,19 @@ Integración con plataformas externas como Google Ads, Meta Ads, TikTok for Busi
 
 - Compliance: Supervisa el cumplimiento de regulaciones locales e internas. Aplica reglas por país o cliente, impone límites de gasto y registra cambios con trazabilidad (quién, qué, cuándo).
 
-### PromptCrm
+### Crm Domain
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
 
-Integración con plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, entre otras
+### Business Domain
+Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
+
+### Integration for Extern Services Domain
+Este dominio le permite la integración de aplicaciones o servicios externos a los demás dominios.
+
+Plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, Google Ads, Meta Ads, TikTok for Business, Mailchimp, Canva, Adobe, Meta Business Suite y OpenAI API, etc...
+
+Así como servicios de pago como PayPal.
+
+A continuación se muestra un diagrama de los dominios de PromptSales.
 
 ![DDD diagram](/diagramDDD.jpg)
