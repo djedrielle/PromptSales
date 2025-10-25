@@ -137,16 +137,16 @@ L3: Se ofrece medio y tiempo. Un encargado del equipo técnico se conectará con
 
 ### Interoperability
 
-* Integración de APIs REST y MCP servers entre subempresas y servicios externos.
+En cuanto a la comunicación entre dominios, esta se reserva a que se haga únicamente mediante entes llamados Facades (fachadas).
 
-
+Se agregó un dominio encargado de proporcionar integración a servicios externos a los demás dominios. Este se llama
+`Integration for Extern Services Domain`.
 
 ### Compliance
 
-* Cumplimiento de GDPR en gestión de datos sensibles.
+Todo pago o transferencia se hace con servicio de terceros. En nuestro PayPal será nuestro provedor.
 
-"Todo pago o transferencia se hace con servicio de terceros (paypal, ...)"
-Owasp para pruebas de seguridad web (vulnerabilidades). "Se aceptarán 0 pruebas críticas, XX leves, XX comunes, etc."
+A la hora de realizar las pruebas automáticas de Owasp se aceptarán un máximo de dos pruebas críticas, siempre y cuándo ninguna de estas se encuentren en la lista de `OWASP Top 10 - 2021`. Se aceptará toda alerta leve relacionada a algún elemente de UI.
 
 ### Extensibility
 
@@ -192,7 +192,7 @@ Este dominio le permite la integración de aplicaciones o servicios externos a l
 
 Plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, Google Ads, Meta Ads, TikTok for Business, Mailchimp, Canva, Adobe, Meta Business Suite y OpenAI API, etc...
 
-Así como servicios de pago como PayPal.
+Así como servicios de pago como PayPal, o de seguridad como Owasp.
 
 A continuación se muestra un diagrama de los dominios de PromptSales.
 
