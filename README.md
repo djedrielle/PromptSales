@@ -84,17 +84,13 @@ Se utilizara kubernetes para contenerización dinámica con un cluster de mínim
 
 ### Reliability
 
-* Tasa de errores máxima permitida: 0.1% de transacciones por día.
-* Monitoreo con pg_stat_statements y logs centralizados.
-* Es importante determinar como se monitorea y como se notifican alertas. 
+Se va a usar el servicio [Amazon CloudWatch](https://aws.amazon.com/es/cloudwatch/?nc2=type_a) de AWS para el monitoreo de alertas del sistema.
+CloudWatch se encargará de recolectar métricas, logs y trazas, además de activar [CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html) cuando se superen los umbrales definidos.
 
-"Nivel de confianza en el sistema"
+Las alertas críticas se enviarán mediante [Amazon SNS](https://aws.amazon.com/es/sns/), el cual notificará por SMS, correo electrónico y WhatsApp usando un webhook externo conectado al grupo de soporte técnico de soporte técnico.
 
-Para este punto ya debemos de saber en qué lo vamos a hacer.
+Tasa de error permitidos 1% transacciones diarias.
 
-¿En el cloud que escogí qué hay para monitorear alertas?
-
-"Se va a usar el servicio XXX de XXX para el monitoreo de alertas críticas. Estas se van a comunicar por XXX, XXX, XXX otras por email. Se va a permitir un máximo de XXX (inventado) errores al día."
 
 ### Availability
 
