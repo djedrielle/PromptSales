@@ -74,13 +74,22 @@ No he encontrado benchmark de conexiones entre MCP server y MCP client.
 
 ### Scalability
 
-* Debe soportar incremento de carga de hasta 10x sin degradación.
-* Kubernetes configurado con autoescalado horizontal por CPU y memoria. Justificarlo con la configuracion de K8s.
+* REST + Django + MySQL
 
-Ya sabemos cuanto hardware ocupamos para cumplir con performance, entonces...
+* utilizando una máquina Microsoft Windows con una CPU Intel Xeon E3-1230 (4 núcleos físicos, 8 hiperprocesos) y 24 GB de memoria, usando 4 CPUs se obtienen 691,66 req/s como lo podemos ver en el [benchmark](https://www.augmentedmind.de/2024/07/14/go-vs-python-performance-benchmark/#:~:text=This%20article%20benchmarks%20the%20performance,than%20for%20both%20Python%20frameworks)
 
-Ejemplo:
-Se utilizara kubernetes para contenerización dinámica con un cluster de mínimo X servers con autoscale de tanto. Cada máquina tendrá XXX specs. Aquí está el link al archivo de configuración de kubernetes.
+* Transaccion: Ejecuta 200 solicitudes GET paralelas al backend REST durante un minuto.
+
+* Requerimiento: 16,666 req/s (~1,000,000 req/min)
+
+* Eligiendo la instancia "r7i.2xlarge" en AWS la cual posee 8 vCPUs, 4 CPU cores, si reservamos 10-15% se tiene que:
+
+- Capacidad efectiva por pod usando 4 CPUs: 691.66 × 0.85 ≈ 588 req/s.
+- Pods necesarios: 16,667 ÷ 588 ≈ 29 pods.
+
+- Como la capacidad de la instancia solo alcanza para 1 pod que usa 4 CPUs, entonces vamos a necesitar ~29 pods de "r7i.2xlarge" configurados en el archivo de k8s.
+
+- Se utilizará Kubernetes (EKS) para contenerización y autoescalado. Inicialmente se desplegarán ~4 pods (cada pod 4 vCPU / 8 GiB, rendimiento de referencia ~691 req/s por benchmark), sobre nodos r7i.2xlarge (8 vCPU, 64 GiB). El autoescalado horizontal (HPA) se activará por CPU (70 %), memoria (70 %) y solicitudes concurrentes por pod (métrica http_requests_inflight vía Prometheus Adapter), pudiendo crecer hasta 30 réplicas (~x10) según demanda. [Archivo Config K8s](/deploy/k8s/base/promptSales-api.yaml)
 
 ### Reliability
 
