@@ -47,7 +47,7 @@ _Seguridad_
 
 El equipo de desarrollo decidió utilizar Python + Django + MySQL en la arquitectura de los dominios.
 
-Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en ![Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
 Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
 
@@ -57,7 +57,7 @@ En la página 4 del documento mencionado Bednarz y Miłosz comparan el tiempo pr
 
 ![Fetch All Avg Time](FetchAllAvgTime.png)
 
-En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en ![MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
+En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en [MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
 
 * El tiempo promedio de respuesta del portal web no debe exceder **2.5 segundos** en operaciones estándar.
 
@@ -133,16 +133,16 @@ L3: Se ofrece medio y tiempo. Un encargado del equipo técnico se conectará con
 
 ### Interoperability
 
-* Integración de APIs REST y MCP servers entre subempresas y servicios externos.
+En cuanto a la comunicación entre dominios, esta se reserva a que se haga únicamente mediante entes llamados Facades (fachadas).
 
-
+Se agregó un dominio encargado de proporcionar integración a servicios externos a los demás dominios. Este se llama
+`Integration for Extern Services Domain`.
 
 ### Compliance
 
-* Cumplimiento de GDPR en gestión de datos sensibles.
+Todo pago o transferencia se hace con servicio de terceros. En nuestro PayPal será nuestro provedor.
 
-"Todo pago o transferencia se hace con servicio de terceros (paypal, ...)"
-Owasp para pruebas de seguridad web (vulnerabilidades). "Se aceptarán 0 pruebas críticas, XX leves, XX comunes, etc."
+A la hora de realizar las pruebas automáticas de Owasp se aceptarán un máximo de dos pruebas críticas, siempre y cuándo ninguna de estas se encuentren en la lista de `OWASP Top 10 - 2021`. Se aceptará toda alerta leve relacionada a algún elemente de UI.
 
 ### Extensibility
 
@@ -188,8 +188,8 @@ Este dominio le permite la integración de aplicaciones o servicios externos a l
 
 Plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, Google Ads, Meta Ads, TikTok for Business, Mailchimp, Canva, Adobe, Meta Business Suite y OpenAI API, etc...
 
-Así como servicios de pago como PayPal.
+Así como servicios de pago como PayPal, o de seguridad como Owasp.
 
 A continuación se muestra un diagrama de los dominios de PromptSales.
 
-![DDD diagram](/diagramDDD.jpg)
+![DDD diagram](/diagramDDD.png)
