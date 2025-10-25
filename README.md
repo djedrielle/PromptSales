@@ -47,7 +47,7 @@ _Seguridad_
 
 El equipo de desarrollo decidió utilizar Python + Django + MySQL en la arquitectura de los dominios.
 
-Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en ![Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
 Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
 
@@ -63,7 +63,13 @@ En este test podemos ver que a Django le toma en promedio 75ms devolver todos lo
 
 Devolver todos los registros de una base de datos se considera una operación compleja, por lo que se puede asumir que una operación estándar en definitiva le tomará a Django menos de 2.5 segundos.
 
+* Las consultas cacheadas mediante Redis deben entregar resultados en menos de **400 milisegundos**.
 
+Tengo el benchmark pero hacen falta las especificaciones de hardware.
+
+* Los procesos de generación automática de contenido o campañas deben ejecutarse en menos de **7 segundos** para solicitudes simples y menos de **20 segundos** para ejecuciones complejas con IA.
+
+No he encontrado benchmark de conexiones entre MCP server y MCP client.
 
 
 ### Scalability
