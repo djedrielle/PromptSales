@@ -47,7 +47,7 @@ _Seguridad_
 
 El equipo de desarrollo decidió utilizar Python + Django + MySQL en la arquitectura de los dominios.
 
-Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en ![Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
 Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
 
@@ -57,7 +57,7 @@ En la página 4 del documento mencionado Bednarz y Miłosz comparan el tiempo pr
 
 ![Fetch All Avg Time](FetchAllAvgTime.png)
 
-En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en ![MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
+En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en [MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
 
 * El tiempo promedio de respuesta del portal web no debe exceder **2.5 segundos** en operaciones estándar.
 
