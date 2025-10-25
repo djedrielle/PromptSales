@@ -196,4 +196,4 @@ Así como servicios de pago como PayPal, o de seguridad como Owasp.
 
 A continuación se muestra un diagrama de los dominios de PromptSales.
 
-![DDD diagram](/diagramDDD.jpg)
+![DDD diagram](/diagramDDD.png)
