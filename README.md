@@ -45,30 +45,25 @@ _Seguridad_
 
 ### Performance
 
-* Tiempo máximo permitido para una consulta estándar: 1.5 segundos.
-* Tiempo máximo para resultados cacheados: 200 ms usando Redis.
-* Tecnología: PostgreSQL, Redis; aquí pueden ser métricas por las técnologías clave por separado. 
+El equipo de desarrollo decidió utilizar Python + Django + MySQL en la arquitectura de los dominios.
+
+Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+
+Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
+
+![Hardware Specs](HardwareSpecs.png)
+
+En la página 4 del documento mencionado Bednarz y Miłosz comparan el tiempo promedio que le toma a distintos frameworks de Python realizar una consulta de todos los registros a una base de datos SQLite:
+
+![Fetch All Avg Time](FetchAllAvgTime.png)
+
+En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en ![MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
+
+* El tiempo promedio de respuesta del portal web no debe exceder **2.5 segundos** en operaciones estándar.
+
+Devolver todos los registros de una base de datos se considera una operación compleja, por lo que se puede asumir que una operación estándar en definitiva le tomará a Django menos de 2.5 segundos.
 
 
-¿Que es lo que más hacen los usuario?
-La operación más intensa es kskksksksk...
-Esto para cada sub empresa.
-
-PromptAds
-
-
-Pivote: el tiempo que toma un read en DB.
-
-Ejemplo:
-Performance (Supuesto)
-Fast + API + Python + SQL Server + REST service
-1000 transacciones duran 1400ms (Fuente: "link"). Cuando se obtiene la info sumarizada de una campaña. Este sería un ejemplo de tiempo para PromptAds.
-
-Si para 1000 transacciones son 1400ms entonces para 100 serían XXX.
-
-El link debe decir las especificaciones de la máquina en la que se hizo. RAM, cores y velocidad de CPU.
-
-Revizar los benchmark de PCMagazine.
 
 
 ### Scalability
