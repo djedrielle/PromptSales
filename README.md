@@ -11,7 +11,7 @@
 
 El equipo de desarrollo decidió utilizar las siguientes tecnologías Python + Django + Postgres.
 
-1 operación de pedir todos los registros a una base de datos SQLite desde una API con Django dura 7.5ms según los benchmarks realizados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+1 request de pedir todos los registros a una base de datos SQLite desde una API con Django dura 75ms según los benchmarks realizados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
 Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
 
@@ -20,20 +20,19 @@ Los benchmarks se llevaron a cabo en una máquina con las siguientes especificac
 * Storage: 1 TB, Samsung SSD 970 EVO
 * Operating System: Windows 10 Home 64-bit  
 
-¿Cuánto tiempo duraría un server con este hardware en hacer 100,000 operaciones de estas?
+¿Cuántas request por segundo es capaz de realizar una máquina de estas según los benchmarks observados (asumiendo que solo tiene 1 worker)?
 
-7.5ms * 100,000 = 12,5min
+1/0.075 = 13,33 req/s
 
-Si 1 server dura 12.5min en realizar 100,000 transacciones, ¿Cuántas instancias de este se necesitan para que las mismas 100,000 transacciones se completen en menos de 1min?
+¿Cuántas req/s ocupamos alcanzar según el requerimiento no funcional?
 
-*Según la regla de 3* se necesitan más de 12 servers para cumplir con este requerimiento.
+100,000/60 = 1667 req/s
 
-Para poder soportar la carga de 100,000 transacciones por minuto por parte de los usuarios implementaremos 16 instancias de un server en AWS con las siguientes especificaciones:
+Si 1 worker puede realizar 13,33 req/s, ¿Cuántos se necesitan para llegar a las 1667 req/s?
 
-* CPU: Intel Core i7-8750H
-* RAM: 16 GB DDR4
-* Storage: 1 TB, Samsung SSD 970 EVO
-* Operating System: Windows 10 Home 64-bit
+*Según la regla de 3* ~ 125
+
+Configuraremos 16 instancias de `c5.2xlarge` AWS, cada una con 8 workers.
 
 ### Scalability
 
