@@ -45,32 +45,31 @@ _Seguridad_
 
 ### Performance
 
-El equipo de desarrollo decidió utilizar Python + Django + MySQL en la arquitectura de los dominios.
+El equipo de desarrollo decidió utilizar las siguientes tecnologías Python + Django + Postgres.
 
-Para diseñar una arquitectura que cumpla los requerimientos no funcionales establecidos, utilizaremos los benchmarks desarrollados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
+1 operación de pedir todos los registros a una base de datos SQLite desde una API con Django dura 7.5ms según los benchmarks realizados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
 Los benchmarks se llevaron a cabo en una máquina con las siguientes especificaciones de hardware:
 
-![Hardware Specs](HardwareSpecs.png)
+* CPU: Intel Core i7-8750H
+* RAM: 16 GB DDR4
+* Storage: 1 TB, Samsung SSD 970 EVO
+* Operating System: Windows 10 Home 64-bit  
 
-En la página 4 del documento mencionado Bednarz y Miłosz comparan el tiempo promedio que le toma a distintos frameworks de Python realizar una consulta de todos los registros a una base de datos SQLite:
+¿Cuánto tiempo duraría este server en hacer 100,000 transacciones?
 
-![Fetch All Avg Time](FetchAllAvgTime.png)
+7.5ms * 100,000 = 12,5min
 
-En este test podemos ver que a Django le toma en promedio 75ms devolver todos los registros de una base de datos SQLite. Como se indica en [MySQL vs SQLite](https://highperformancesqlite.com/articles/sqlite-vs-mysql-what-are-the-differences) MySQL es más rápido en escenarios de alta concurrencia con múltiples usuarios. Por lo que podemos asumir que el tiempo promedio que le tomaría a Django devolver todos los registros de una base de datos MySQL no sobrepasa el tiempo que le tomó devolver todos los registros en el benchmark. Uno de los requerimientos no funcionales indica lo siguiente:
+Si 1 server dura 12.5min en realizar 100,000 transacciones, ¿Cuántos servers se necesitan para que las mismas 100,000 transacciones duren menos de 1min?
 
-* El tiempo promedio de respuesta del portal web no debe exceder **2.5 segundos** en operaciones estándar.
+*Según la regla de 3* se necesitan más de 12 servers para cumplir con este requerimiento.
 
-Devolver todos los registros de una base de datos se considera una operación compleja, por lo que se puede asumir que una operación estándar en definitiva le tomará a Django menos de 2.5 segundos.
+Para poder soportar la carga de 100,000 solicitudes por minuto por parte de los usuarios implementaremos 16 instancias de un server en AWS con las siguientes especificaciones:
 
-* Las consultas cacheadas mediante Redis deben entregar resultados en menos de **400 milisegundos**.
-
-Tengo el benchmark pero hacen falta las especificaciones de hardware.
-
-* Los procesos de generación automática de contenido o campañas deben ejecutarse en menos de **7 segundos** para solicitudes simples y menos de **20 segundos** para ejecuciones complejas con IA.
-
-No he encontrado benchmark de conexiones entre MCP server y MCP client.
-
+* CPU: Intel Core i7-8750H
+* RAM: 16 GB DDR4
+* Storage: 1 TB, Samsung SSD 970 EVO
+* Operating System: Windows 10 Home 64-bit
 
 ### Scalability
 
@@ -106,34 +105,46 @@ Esto se refiere al porcentaje del tiempo que el sistema debería de estar dispon
 
 ### Security
 
-* Autenticación: OAuth 2.0 y/o OpenID Connect.
-* Cifrado TLS 1.3 en comunicación y AES-256 en reposo.
+Se aplicará una autenticación basada en OpenID Connect. Esta será proporcionada por Okta.
 
-¿Cómo voy a hacer el cifrado y la autenticacion?
+Para cifrar los datos en la comunicación de REST se aplicará TLS. 
 
-Primero decidir si va a ser OAuth o OpenID Connect
-
-REST con SSL 
-
-Para cada base de datos averiguo qué cifrado ofrece y selecciono la opción que más me parezca.
-Mongo utiliza XXX cifrado.
-SQL Server XXX cifrado...
+En las bases de datos Mongo y MySQL utilizaremos el cifrado AES-256.
 
 ### Maintainability
 
-* Código modular siguiendo DDD y separación de dominios.
-* Documentación en readme.md y comentarios claros en código.
+El código se desarrollará de manera modular siguiendo DDD y separación de dominios.
 
-¿Cómo le voy a dar mantenimiento al sistema durante y después?
+Durante el desarrollo se seguirá el siguiente GitFlow
 
-¿Durante el desarrollo?
-Sisteam de tiquetes, investigar sobre GitFlows, PRs, branching, realease process ("van a utilizar branches conversión promptv{}") habrá un release cada 3 semanas, procedimiento de hotfixes.
+El branch `main` se utilizará unicamente para llevar el control de versiones en producción, estas son versiones estables. `develop` se utilizará para la integración de nuevas funcionalidades en preparación para la próxima versión. Cuando una versión ya está preparada se hace merge a `main`.
 
-¿Después de desarrollo?
-Buscar niveles de soporte L1, L2 y L3. No queremos tener problemas en L3.
-L1: Se le ofrece al usuario manuales y un RAG o bot en WhatsApp que le sirva como asistente a los usuarios.
-L2: Se le ofrece la disponibilidad al usuario por email para que el equipo de support le brinda apoyo.
-L3: Se ofrece medio y tiempo. Un encargado del equipo técnico se conectará con el usuario para brindarle apoyo.
+También se definen las siguientes sub-branches de soporte:
+
+`feature/*` → nuevas funcionalidades (creadas desde develop).
+
+`release/*` → preparación de una versión antes del despliegue (desde develop, luego se fusiona en main y develop).
+
+`hotfix/*` → correcciones urgentes en producción (creadas desde main y luego fusionadas de vuelta a develop).
+
+Todo PR a `main` debe incluir una descripción detallada del cambio que se realizó. Se utilizarán herramientas automáticas (CI/CD) para verificar el formato, cálidad del código y pruebas unitarias. Solo tras la aprobación de los revisores el código se integra a la rama principal.
+
+Esta es la estrategia que se seguirá para abordar hotfixes:
+
+Primeramente se creará una rama desde main con el nombre `hotfix/*Info del bug*`, en esta rama se implementará y probará la corrección, una vez esta esté lista, se hará un PR hacia main (para despliegue inmediato). Seguidamente se fusionará el hotfix también hacia develop (para mantener sincronizadas las ramas). Por último se documentará el cambio.
+
+Para el release de versiones se hará uso de la rama `release/*version*`. En esta se harán puebas QA para la validación funcional, de rendimiento y seguridad. En caso de que se necesiten correcciones menores estas se harán sobre la misma rama. Luego se hará un merge a `main` para desplegar en producción, y a `develop` para sincronización de cambios.
+
+El proceso de soporte post-release será de la siguiente manera:
+
+L0: Se creará y se brindará soporte a centros de ayuda como foros y videos tutoriales. También se brindarán a disposición chatbots con respuestas automáticas y flujos guiados.
+Todo esto se complementará con documentación técnica y guías para desarrolladores.
+
+L1: Se brindará soporte a solicitudes recibidas vía correo, chat, redes o tickets. También se tendrán a disposición scripts o flujos predefinidos para resolver problemas comunes.
+
+L2: Este nivel busca abordar problemas complejos o no documentados que requieren un diagnóstico técnico más profundo. Estos son problemas que no se lograron solucionar en L1. Como estrategia se dispondrá de personal capacitado para brindar soporte al usuario hasta llegar a una solución temporal o definitiva. Este soporte será brindado a través de reunión virtual o presencial, dependiendo de la disponibilidad.
+
+L3: En caso de no encontrar solución definitiva a un problema en L2, el usuario será referido a uno de los integrantes del equipo de desarrollo de la plataforma. Este integrante le brindará soporte al usuario y en caso de que darle solución implique realizar algún cambio en la estructura de la aplicación, este proceso se llevará a cabo.
 
 ### Interoperability
 
