@@ -1,9 +1,9 @@
 # Entregable 1 del Caso 2 | Diseño de Software
 
 ### Desarrollado por
-    * Djedrielle Alexander
-    * Sebastian Chacón
-    * Isaac Gamboa
+* Djedrielle Alexander
+* Sebastian Chacón
+* Isaac Gamboa
 
 ## Métricas de los requerimientos no funcionales
 
