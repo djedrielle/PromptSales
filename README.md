@@ -20,15 +20,15 @@ Los benchmarks se llevaron a cabo en una máquina con las siguientes especificac
 * Storage: 1 TB, Samsung SSD 970 EVO
 * Operating System: Windows 10 Home 64-bit  
 
-¿Cuánto tiempo duraría este server en hacer 100,000 transacciones?
+¿Cuánto tiempo duraría un server con este hardware en hacer 100,000 operaciones de estas?
 
 7.5ms * 100,000 = 12,5min
 
-Si 1 server dura 12.5min en realizar 100,000 transacciones, ¿Cuántos servers se necesitan para que las mismas 100,000 transacciones duren menos de 1min?
+Si 1 server dura 12.5min en realizar 100,000 transacciones, ¿Cuántas instancias de este se necesitan para que las mismas 100,000 transacciones se completen en menos de 1min?
 
 *Según la regla de 3* se necesitan más de 12 servers para cumplir con este requerimiento.
 
-Para poder soportar la carga de 100,000 solicitudes por minuto por parte de los usuarios implementaremos 16 instancias de un server en AWS con las siguientes especificaciones:
+Para poder soportar la carga de 100,000 transacciones por minuto por parte de los usuarios implementaremos 16 instancias de un server en AWS con las siguientes especificaciones:
 
 * CPU: Intel Core i7-8750H
 * RAM: 16 GB DDR4
@@ -76,9 +76,9 @@ Esto se refiere al porcentaje del tiempo que el sistema debería de estar dispon
 
 Se aplicará una autenticación basada en OpenID Connect. Esta será proporcionada por Okta.
 
-Para cifrar los datos en la comunicación de REST se aplicará TLS. 
+Para cifrar los datos en la comunicación de REST se utilizará TLS. 
 
-En las bases de datos Mongo y MySQL utilizaremos el cifrado AES-256.
+En las bases de datos Mongo, Postgres y MySQL utilizaremos el cifrado AES-256.
 
 ### Maintainability
 
@@ -86,7 +86,7 @@ El código se desarrollará de manera modular siguiendo DDD y separación de dom
 
 Durante el desarrollo se seguirá el siguiente GitFlow
 
-El branch `main` se utilizará unicamente para llevar el control de versiones en producción, estas son versiones estables. `develop` se utilizará para la integración de nuevas funcionalidades en preparación para la próxima versión. Cuando una versión ya está preparada se hace merge a `main`.
+El branch `main` se utilizará únicamente para llevar el control de versiones en producción, estas son versiones finales de la plataforma. `develop` se utilizará para la integración de nuevas funcionalidades en preparación para la próxima versión final.
 
 También se definen las siguientes sub-branches de soporte:
 
@@ -96,7 +96,7 @@ También se definen las siguientes sub-branches de soporte:
 
 `hotfix/*` → correcciones urgentes en producción (creadas desde main y luego fusionadas de vuelta a develop).
 
-Todo PR a `main` debe incluir una descripción detallada del cambio que se realizó. Se utilizarán herramientas automáticas (CI/CD) para verificar el formato, cálidad del código y pruebas unitarias. Solo tras la aprobación de los revisores el código se integra a la rama principal.
+Todo PR a `main` debe incluir una descripción detallada del cambio que se realizó. Se utilizarán herramientas automáticas (CI/CD) para verificar el formato, calidad del código y pruebas unitarias. Solo tras la aprobación de los revisores el código se integra a la rama principal.
 
 Esta es la estrategia que se seguirá para abordar hotfixes:
 
@@ -104,14 +104,14 @@ Primeramente se creará una rama desde main con el nombre `hotfix/*Info del bug*
 
 Para el release de versiones se hará uso de la rama `release/*version*`. En esta se harán puebas QA para la validación funcional, de rendimiento y seguridad. En caso de que se necesiten correcciones menores estas se harán sobre la misma rama. Luego se hará un merge a `main` para desplegar en producción, y a `develop` para sincronización de cambios.
 
-El proceso de soporte post-release será de la siguiente manera:
+La estrategia de soporte post-release es la siguiente:
 
-L0: Se creará y se brindará soporte a centros de ayuda como foros y videos tutoriales. También se brindarán a disposición chatbots con respuestas automáticas y flujos guiados.
+L0: Se creará y brindará soporte a centros de ayuda como foros y videos tutoriales. También se dispondrán chatbots con respuestas automáticas y flujos guiados.
 Todo esto se complementará con documentación técnica y guías para desarrolladores.
 
-L1: Se brindará soporte a solicitudes recibidas vía correo, chat, redes o tickets. También se tendrán a disposición scripts o flujos predefinidos para resolver problemas comunes.
+L1: Se brindará soporte a solicitudes recibidas vía correo, chat o redes. También se tendrán a disposición scripts o flujos predefinidos para resolver problemas comunes.
 
-L2: Este nivel busca abordar problemas complejos o no documentados que requieren un diagnóstico técnico más profundo. Estos son problemas que no se lograron solucionar en L1. Como estrategia se dispondrá de personal capacitado para brindar soporte al usuario hasta llegar a una solución temporal o definitiva. Este soporte será brindado a través de reunión virtual o presencial, dependiendo de la disponibilidad.
+L2: Para abordar los problemas no solucionados en L1 se dispondrá de personal capacitado para brindar soporte al usuario hasta llegar a una solución temporal o definitiva. Este soporte será brindado a través de reunión virtual o presencial, dependiendo de la disponibilidad.
 
 L3: En caso de no encontrar solución definitiva a un problema en L2, el usuario será referido a uno de los integrantes del equipo de desarrollo de la plataforma. Este integrante le brindará soporte al usuario y en caso de que darle solución implique realizar algún cambio en la estructura de la aplicación, este proceso se llevará a cabo.
 
