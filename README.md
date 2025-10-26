@@ -1,47 +1,11 @@
-# Entregable 1 - 26 de octubre último commit - 5%
+# Entregable 1 del Caso 2 | Diseño de Software
+
+### Desarrollado por
+    * Djedrielle Alexander
+    * Sebastian Chacón
+    * Isaac Gamboa
 
 ## Métricas de los requerimientos no funcionales
-
-Documentar cada atributo no funcional con valores cuantitativos, parámetros técnicos y tecnologías a usar. Incluir ejemplos claros, abajo se documentan ejemplos de valores y tecnologías, pero ustedes deben diseñar y encontrar sus propios valores los cuales deben estar justificados por alguna teoría o práctica debidamente argumentada y analizada; realizando las extrapolaciones o cálculos que usted pueda diseñar bajo un algoritmo o método cuantitativo diseñado por el grupo mismo. 
-
-Integrantes:
-kskskss
-ksksks
-ksksksk
-
-
-### Requerimientos No Funcionales (Utilizar estos para desarrollar el Entregable 1)
-
-_Rendimiento_ 
-
-* El tiempo promedio de respuesta del portal web no debe exceder **2.5 segundos** en operaciones estándar.
-* Las consultas cacheadas mediante Redis deben entregar resultados en menos de **400 milisegundos**.
-* Los procesos de generación automática de contenido o campañas deben ejecutarse en menos de **7 segundos** para solicitudes simples y menos de **20 segundos** para ejecuciones complejas con IA.
-
-_Escalabilidad_
-
-* La arquitectura debe soportar un incremento de **hasta 10 veces** la carga base sin degradación perceptible del rendimiento.
-* Kubernetes debe permitir **autoescalado horizontal** basado en CPU, memoria y número de solicitudes concurrentes.
-* El sistema debe manejar simultáneamente **más de 5000 campañas activas** y **más de 300 agentes o usuarios concurrentes** distribuidos entre las subempresas.
-* Las API de cualquiera de las plataformas podría llegar a alcanzar en el primer año hasta 100000 operaciones de usuario por minuto que requieren acceso a la base de datos, en horario habitual de 7am hasta 7pm. Y hasta 300 procesos no supervisados por minuto ejecutándose en background fuera de horario de oficina. 
-
-_Tolerancia a Fallos_
-
-* Disponibilidad mínima del sistema de **99.9% mensual**.
-* Los contenedores críticos deben reiniciarse automáticamente ante fallos o degradación de servicio.
-* Redis y las bases de datos deben contar con **replicación en tiempo real** y **failover automático**.
-* Implementación de **backups automáticos diarios** y retención mínima de **30 días**.
-
-_Seguridad_
-
-* Autenticación y autorización mediante **OAuth 2.0** para todos los usuarios y servicios.
-* Cifrado de todas las comunicaciones entre servicios con **TLS 1.3**.
-* Cifrado de datos en reposo con **AES-256** en bases de datos y almacenamiento persistente.
-* Auditoría y logging centralizado con retención de **90 días**.
-* Cumplimiento con estándares de protección de datos internacionales (**GDPR, CCPA**) y políticas de acceso mínimo necesario (principio de least privilege).
-
-# Hay que diseñar estrategias para cumplir con los requerimientos no funcionales, como evidencia de que la estrategia diseñada cumple los requerimientos no funcionales hay que adjuntar algún benchmark hecho a esa tecnología. Los resultados de estos benchmarks hay que escalarlos a nuestra implementación.
-
 
 ### Performance
 
