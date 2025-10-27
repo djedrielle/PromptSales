@@ -207,10 +207,10 @@ Se pueden observar la estructura de carpetas basada en este Domain Driven Design
 
 Siempre que crees un nuevo dominio, agrega:
 
-`core/domain/<dominio>/...`
-`core/application/dto|interfaces|use_cases|facades`
-`core/infrastructure/db/models|repositories y adapters externos si aplica`
-`endpoints en api/v1/<dominio>/...`
+- `core/domain/<dominio>/...`
+- `core/application/dto|interfaces|use_cases|facades`
+- `core/infrastructure/db/models|repositories y adapters externos si aplica`
+- `endpoints en api/v1/<dominio>/...`
 
 ### Crm Domain
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
