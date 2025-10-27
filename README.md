@@ -77,9 +77,9 @@ Se va a usar el servicio [ALB](https://aws.amazon.com/es/elasticloadbalancing/ap
 
 **Kubernetes/EC2**
 
-Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/what-is-eks.html) de AWS para kubernetes y 
-SLA EKS: [99.95%](https://d1.awsstatic.com/legal/amazon-eks-sla/Amazon%20EKS%20Service%20Level%20Agreement_Spanish_2022-05-04.pdf)
-SLA EC2: [99.99%](https://d1.awsstatic.com/legal/AmazonComputeServiceLevelAgreement/Amazon_Compute_Service_Level_Agreement_Spanish_2022-05-25.pdf)
+Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/what-is-eks.html) de AWS para kubernetes y [EC2](https://aws.amazon.com/es/ec2/) para computación.
+- SLA EKS: [99.95%](https://d1.awsstatic.com/legal/amazon-eks-sla/Amazon%20EKS%20Service%20Level%20Agreement_Spanish_2022-05-04.pdf)
+- SLA EC2: [99.99%](https://d1.awsstatic.com/legal/AmazonComputeServiceLevelAgreement/Amazon_Compute_Service_Level_Agreement_Spanish_2022-05-25.pdf)
 
 **Bases de datos**
 
@@ -88,6 +88,7 @@ Para las bases de datos PostgreSQL y MySQL se utilizará [Amazon Aurora](https:/
 - RPO objetivo: ≈ 0 s
 - RTO objetivo (failover): ≤ 60 s (conmutación automática a réplica).
 - SLA: [99.99%](https://aws.amazon.com/es/rds/aurora/sla/)
+
 Para MongoDB se va a usar [MongoDB Atlas](https://aws.amazon.com/es/partners/mongodb/)
 - Atlas Replica Set (3 nodos, 2+ AZ)
 - RPO objetivo: ≈ 0 s
@@ -105,8 +106,8 @@ Para el cache se va a usar el servicio [Amazon ElastiCache for Redis](https://aw
 - SLA: [99.99%](https://d1.awsstatic.com/legal/elasticache-sla/Amazon%20Elasticache%20Service%20Level%20Agreement_2023-11-27-es_la-R-C.pdf)
 
 **Uptime**
-0.9999x0.9995x0.9999x0.9999x0.99995x0.9999 ≈ 0.99905
-La disponibilidad sería 99.905%, cumpliendo así el requerimiento
+
+La disponibilidad sería 99.905%, cumpliendo así el requerimiento.
 
 ### Security
 
