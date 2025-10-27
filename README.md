@@ -199,9 +199,6 @@ Este dominio se encarga de la creación de contenido textual, audiovisual e imá
 
 - Compliance: Supervisa el cumplimiento de regulaciones locales e internas. Aplica reglas por país o cliente, impone límites de gasto y registra cambios con trazabilidad (quién, qué, cuándo).
 
-<<<<<<< HEAD
-### PromptCrm Domains
-=======
 **Diagrama DDD PromptAds**
 
 ![DDD diagram](/DiagramaDDDPromptAds.drawio%20(1).png)
@@ -216,7 +213,6 @@ Siempre que crees un nuevo dominio, agrega:
 - `endpoints en api/v1/<dominio>/...`
 
 ### Crm Domain
->>>>>>> 8af0ed589c397429edb3e36baaa0bfe80f896e41
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
 
 - Contacts Management Domain: registro de clientes, leads, cuentas, y organizaciones.
