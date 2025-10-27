@@ -65,11 +65,49 @@ Tasa de error permitidos 1% transacciones diarias.
 
 ### Availability
 
-* Disponibilidad mínima: 99.9% mensual. En el diseño de infraestructura debe lograr verse como se logra esto, podría ir en el diagrama de arquitectura, pero sería mejor uno de infraestructura. 
-* Redis y bases de datos con failover y replicación.
-* Considere load balancers. 
+**Downtime permitido**:
+- 43.8 min mensuales
+- 525.6 min anuales
 
-Esto se refiere al porcentaje del tiempo que el sistema debería de estar disponible. 98% o 99,7% etc. Existe un ejemplo de esto en el Excel. 
+**Balanceador de Carga**
+
+Se va a usar el servicio [ALB](https://aws.amazon.com/es/elasticloadbalancing/application-load-balancer/) de AWS como balanceador de carga.
+- Health checks: `interval: 10s`, `unhealthyThreshold: 3`, `timeout: 5s`.
+- SLA AWS: [99.99%](https://d1.awsstatic.com/legal/AmazonElasticLoadBalancing/Amazon_Elastic_Load_Balancing_Service_Level_Agreement_2022-07-25_ES-ES.pdf)
+
+**Kubernetes/EC2**
+
+Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/what-is-eks.html) de AWS para kubernetes y [EC2](https://aws.amazon.com/es/ec2/) para computación.
+- SLA EKS: [99.95%](https://d1.awsstatic.com/legal/amazon-eks-sla/Amazon%20EKS%20Service%20Level%20Agreement_Spanish_2022-05-04.pdf)
+- SLA EC2: [99.99%](https://d1.awsstatic.com/legal/AmazonComputeServiceLevelAgreement/Amazon_Compute_Service_Level_Agreement_Spanish_2022-05-25.pdf)
+
+**Bases de datos**
+
+Para las bases de datos PostgreSQL y MySQL se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+- Aurora Multi-AZ (writer + reader)
+- RPO objetivo: ≈ 0 s
+- RTO objetivo (failover): ≤ 60 s (conmutación automática a réplica).
+- SLA: [99.99%](https://aws.amazon.com/es/rds/aurora/sla/)
+
+Para MongoDB se va a usar [MongoDB Atlas](https://aws.amazon.com/es/partners/mongodb/)
+- Atlas Replica Set (3 nodos, 2+ AZ)
+- RPO objetivo: ≈ 0 s
+- RTO objetivo (election/failover): ≈ 10–60 s.
+- SLA: [99.995%](https://www.mongodb.com/legal/sla/cloud/atlas-database)
+
+**Backups**
+
+Se configurarán backups automáticos diarios en Amazon Aurora y MongoDB Atlas,
+con una retención mínima de 30 días según las políticas de cada servicio administrado.
+
+**Cache**
+
+Para el cache se va a usar el servicio [Amazon ElastiCache for Redis](https://aws.amazon.com/es/documentation-overview/redis/) en Multi-AZ con Auto-Failover
+- SLA: [99.99%](https://d1.awsstatic.com/legal/elasticache-sla/Amazon%20Elasticache%20Service%20Level%20Agreement_2023-11-27-es_la-R-C.pdf)
+
+**Uptime**
+
+La disponibilidad sería 99.905%, cumpliendo así el requerimiento.
 
 ### Security
 
@@ -141,8 +179,9 @@ Este dominio se encarga de la creación de contenido textual, audiovisual e imá
 - Video Generation
 - AI services provider for other domains
 
-### Campaign Management and Analitics Domain
-Este dominio se encarga del diseño, segmentación y publicación de campañas publicitarias en redes sociales, email marketing, SMS, LinkedIn e influencers. También se encarga del análisis en tiempo real del rendimiento de estas campañas. Las campañas son generadas de manera automática a partir de datos de públicos meta y objetivos de venta.
+### PromptAds
+
+**Lista de dominios principales**
 
 - Campaign Planning: Encargado de diseñar la campaña publicitaria a partir del objetivo definido por el cliente. Define los KPIs, canales, formatos y duración de la campaña.
 
@@ -160,7 +199,17 @@ Este dominio se encarga del diseño, segmentación y publicación de campañas p
 
 - Compliance: Supervisa el cumplimiento de regulaciones locales e internas. Aplica reglas por país o cliente, impone límites de gasto y registra cambios con trazabilidad (quién, qué, cuándo).
 
+<<<<<<< HEAD
 ### PromptCrm Domains
+=======
+**Diagrama DDD PromptAds**
+
+![DDD diagram](/DiagramaDDDPromptAds.drawio%20(1).png)
+
+Se pueden observar la estructura de carpetas basada en este Domain Driven Design para PromptAds, asi como tambien plantillas de codigo de alguno elementos importantes como facades, contracts, use_cases y tests en la siguiente ruta -> [Organizacion y Plantillas](/PromptAds/)
+
+### Crm Domain
+>>>>>>> 8af0ed589c397429edb3e36baaa0bfe80f896e41
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
 
 - Contacts Management Domain: registro de clientes, leads, cuentas, y organizaciones.
