@@ -193,6 +193,10 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 - Cloud: Proporciona almacenamiento centralizado, versionado y recuperación de recursos multimedia, además de controlar permisos de acceso entre dominios.
 
+**Diagrama DDD PromptAds**
+
+![DDD diagram](/Prompcontent.png)
+
 ### PromptAds Domains
 
 **Lista de dominios principales**
