@@ -199,6 +199,9 @@ Este dominio se encarga de la creación de contenido textual, audiovisual e imá
 
 - Compliance: Supervisa el cumplimiento de regulaciones locales e internas. Aplica reglas por país o cliente, impone límites de gasto y registra cambios con trazabilidad (quién, qué, cuándo).
 
+![DDD diagram](/DiagramaDDDPromptAds.drawio%20(1).png)
+
+
 ### Crm Domain
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
 
