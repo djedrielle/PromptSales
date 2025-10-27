@@ -179,8 +179,9 @@ Este dominio se encarga de la creación de contenido textual, audiovisual e imá
 - Video Generation
 - AI services provider for other domains
 
-### Campaign Management and Analitics Domain
-Este dominio se encarga del diseño, segmentación y publicación de campañas publicitarias en redes sociales, email marketing, SMS, LinkedIn e influencers. También se encarga del análisis en tiempo real del rendimiento de estas campañas. Las campañas son generadas de manera automática a partir de datos de públicos meta y objetivos de venta.
+### PromptAds
+
+**Lista de dominios principales**
 
 - Campaign Planning: Encargado de diseñar la campaña publicitaria a partir del objetivo definido por el cliente. Define los KPIs, canales, formatos y duración de la campaña.
 
