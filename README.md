@@ -221,7 +221,7 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 
 - Overall Leads Info Domain: consolidación de toda la información e historial en una sola interfaz.
 
-![DDD diagram](/diagramDDD.png)
+![DDD diagram](/diagramDDD.jpg)
 
 ### Business Domain
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
