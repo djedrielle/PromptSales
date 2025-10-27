@@ -208,6 +208,13 @@ Este dominio se encarga de la creación de contenido textual, audiovisual e imá
 
 Se pueden observar la estructura de carpetas basada en este Domain Driven Design para PromptAds, asi como tambien plantillas de codigo de alguno elementos importantes como facades, contracts, use_cases y tests en la siguiente ruta -> [Organizacion y Plantillas](/PromptAds/)
 
+Siempre que crees un nuevo dominio, agrega:
+
+`core/domain/<dominio>/...`
+`core/application/dto|interfaces|use_cases|facades`
+`core/infrastructure/db/models|repositories y adapters externos si aplica`
+`endpoints en api/v1/<dominio>/...`
+
 ### Crm Domain
 >>>>>>> 8af0ed589c397429edb3e36baaa0bfe80f896e41
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
