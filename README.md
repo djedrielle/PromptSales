@@ -65,11 +65,48 @@ Tasa de error permitidos 1% transacciones diarias.
 
 ### Availability
 
-* Disponibilidad mínima: 99.9% mensual. En el diseño de infraestructura debe lograr verse como se logra esto, podría ir en el diagrama de arquitectura, pero sería mejor uno de infraestructura. 
-* Redis y bases de datos con failover y replicación.
-* Considere load balancers. 
+**Downtime permitido**:
+- 43.8 min mensuales
+- 525.6 min anuales
 
-Esto se refiere al porcentaje del tiempo que el sistema debería de estar disponible. 98% o 99,7% etc. Existe un ejemplo de esto en el Excel. 
+**Balanceador de Carga**
+
+Se va a usar el servicio [ALB](https://aws.amazon.com/es/elasticloadbalancing/application-load-balancer/) de AWS como balanceador de carga.
+- Health checks: `interval: 10s`, `unhealthyThreshold: 3`, `timeout: 5s`.
+- SLA AWS: [99.99%](https://d1.awsstatic.com/legal/AmazonElasticLoadBalancing/Amazon_Elastic_Load_Balancing_Service_Level_Agreement_2022-07-25_ES-ES.pdf)
+
+**Kubernetes/EC2**
+
+Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/what-is-eks.html) de AWS para kubernetes y 
+SLA EKS: [99.95%](https://d1.awsstatic.com/legal/amazon-eks-sla/Amazon%20EKS%20Service%20Level%20Agreement_Spanish_2022-05-04.pdf)
+SLA EC2: [99.99%](https://d1.awsstatic.com/legal/AmazonComputeServiceLevelAgreement/Amazon_Compute_Service_Level_Agreement_Spanish_2022-05-25.pdf)
+
+**Bases de datos**
+
+Para las bases de datos PostgreSQL y MySQL se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+- Aurora Multi-AZ (writer + reader)
+- RPO objetivo: ≈ 0 s
+- RTO objetivo (failover): ≤ 60 s (conmutación automática a réplica).
+- SLA: [99.99%](https://aws.amazon.com/es/rds/aurora/sla/)
+Para MongoDB se va a usar [MongoDB Atlas](https://aws.amazon.com/es/partners/mongodb/)
+- Atlas Replica Set (3 nodos, 2+ AZ)
+- RPO objetivo: ≈ 0 s
+- RTO objetivo (election/failover): ≈ 10–60 s.
+- SLA: [99.995%](https://www.mongodb.com/legal/sla/cloud/atlas-database)
+
+**Backups**
+
+Se configurarán backups automáticos diarios en Amazon Aurora y MongoDB Atlas,
+con una retención mínima de 30 días según las políticas de cada servicio administrado.
+
+**Cache**
+
+Para el cache se va a usar el servicio [Amazon ElastiCache for Redis](https://aws.amazon.com/es/documentation-overview/redis/) en Multi-AZ con Auto-Failover
+- SLA: [99.99%](https://d1.awsstatic.com/legal/elasticache-sla/Amazon%20Elasticache%20Service%20Level%20Agreement_2023-11-27-es_la-R-C.pdf)
+
+**Uptime**
+0.9999x0.9995x0.9999x0.9999x0.99995x0.9999 ≈ 0.99905
+La disponibilidad sería 99.905%, cumpliendo así el requerimiento
 
 ### Security
 
