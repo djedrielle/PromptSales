@@ -160,14 +160,16 @@ Este dominio se encarga del diseño, segmentación y publicación de campañas p
 
 - Compliance: Supervisa el cumplimiento de regulaciones locales e internas. Aplica reglas por país o cliente, impone límites de gasto y registra cambios con trazabilidad (quién, qué, cuándo).
 
-### Crm Domain
+### PromptCrm Domains
 Este dominio se encarga principalmente del monitoreo de leads. Estos se registran y clasifican automáticamente con sus respectivos datos de proveniencia. Para la interacción con el usuario el dominio ofrece chatbots, voicebots y flujos automatizados de atención. Todo esto es proporcionado por la implementación de IA.
 
-- Gestión de contactos: registro de clientes, leads, cuentas, y organizaciones.
+- Contacts Management Domain: registro de clientes, leads, cuentas, y organizaciones.
 
-- Segmentación de clientes: clasificación por tipo, industria, potencial de compra, región, etc.
+- Leads Segmentation Domain: clasificación por tipo, industria, potencial de compra, región, etc.
 
-- Vista 360° del cliente: consolidación de toda la información e historial en una sola interfaz.
+- Overall Leads Info Domain: consolidación de toda la información e historial en una sola interfaz.
+
+![DDD diagram](/diagramDDD.png)
 
 ### Business Domain
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
@@ -181,4 +183,3 @@ Así como servicios de pago como PayPal, o de seguridad como Owasp.
 
 A continuación se muestra un diagrama de los dominios de PromptSales.
 
-![DDD diagram](/diagramDDD.png)
