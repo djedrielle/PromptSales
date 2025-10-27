@@ -169,7 +169,7 @@ A la hora de realizar las pruebas automáticas de Owasp se aceptarán un máximo
 
 En futuras versiones el alcance de esta arquitectura se puede extender conectando REST APIs, creando nuevos MCP Servers o incluso acoplando nuevos dominios.
 
-## Domain driven design
+## Domain Driven Design
 
 ### PromptContent
 
@@ -193,7 +193,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 - Cloud: Proporciona almacenamiento centralizado, versionado y recuperación de recursos multimedia, además de controlar permisos de acceso entre dominios.
 
-### PromptAds
+### PromptAds Domains
 
 **Lista de dominios principales**
 
@@ -235,17 +235,17 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 
 - Overall Leads Info Domain: consolidación de toda la información e historial en una sola interfaz.
 
+**Diagrama DDD PromptCrm**
+
 ![DDD diagram](/diagramDDD.jpg)
 
-### Business Domain
+### Business Domain (Global)
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
 
-### Integration for Extern Services Domain
+### Integration for Extern Services Domain (Global)
 Este dominio le permite la integración de aplicaciones o servicios externos a los demás dominios.
 
 Plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, Google Ads, Meta Ads, TikTok for Business, Mailchimp, Canva, Adobe, Meta Business Suite y OpenAI API, etc...
 
 Así como servicios de pago como PayPal, o de seguridad como Owasp.
-
-A continuación se muestra un diagrama de los dominios de PromptSales.
 
