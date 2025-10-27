@@ -171,13 +171,27 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 ## Domain Driven Design
 
-### PromptContent Domains
-Este dominio se encarga de la creación de contenido textual, audiovisual e imágenes. También opera y ofrece servicios de IA a otros dominios como `Campaign Management and Analitics` y `Crm`.
+### PromptContent
 
-- Text Generation
-- Image Generation
-- Video Generation
-- AI services provider for other domains
+**Dominios principales**
+
+- Creative Briefing: Encargado de recopilar los objetivos, públicos meta, tono y lineamientos del cliente para generar el brief creativo que guía toda la producción de contenido.
+
+- Text Generation: Genera textos publicitarios, descripciones o copys basados en el brief aprobado. Aplica control de tono, idioma y longitud del mensaje según el canal.
+
+- Image Generation: Produce imágenes, banners o ilustraciones usando modelos de IA y plantillas predefinidas, respetando los lineamientos del brief.
+
+- Video Generation: Crea videos o animaciones a partir del contenido textual y visual generado. Gestiona duración, formato y metadatos por plataforma destino.
+
+- Campaign Generation: Combina texto, imágenes y videos en piezas completas de campaña. Define variantes por canal, idioma y formato, y prepara entregables finales.
+
+- Culture Campaign Generation: Adapta el contenido generado a contextos culturales e idiomáticos, asegurando coherencia local y evitando sesgos o errores culturales.
+
+- SEO & Adaptation: Optimiza el contenido generado para motores de búsqueda y asistentes IA, ajustando keywords, títulos y metadatos según mercado y canal.
+
+- External Publishing: Gestiona la publicación del contenido en plataformas externas (redes sociales, CMS, blogs o herramientas publicitarias) y controla su trazabilidad.
+
+- Cloud: Proporciona almacenamiento centralizado, versionado y recuperación de recursos multimedia, además de controlar permisos de acceso entre dominios.
 
 ### PromptAds Domains
 
