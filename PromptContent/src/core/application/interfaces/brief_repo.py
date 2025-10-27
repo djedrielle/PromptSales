@@ -1,0 +1,6 @@
+from typing import Protocol, Optional
+from src.core.domain.creative_brief.entities import Brief
+
+class IBriefRepository(Protocol):
+    def create(self, b: Brief) -> Brief: ...
+    def by_id(self, bid: str) -> Optional[Brief]: ...
