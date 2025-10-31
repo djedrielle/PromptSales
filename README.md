@@ -68,7 +68,9 @@ Tasa de error permitidos 1% transacciones diarias.
 **Downtime permitido**:
 A partir del requerimiento de disponibilidad mínima del 99.9 %, se calculó el tiempo máximo de inactividad permitido en un año.
 Un año tiene 525 600 minutos, por lo que:
+
 `525 600 x 0.999 = 525074.4 `
+
 Al restar este resultado del total anual se obtiene el tiempo de inactividad permitido:
 - 43.8 min mensuales
 - 525.6 min anuales
