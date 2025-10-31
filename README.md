@@ -66,6 +66,10 @@ Tasa de error permitidos 1% transacciones diarias.
 ### Availability
 
 **Downtime permitido**:
+A partir del requerimiento de disponibilidad mínima del 99.9 %, se calculó el tiempo máximo de inactividad permitido en un año.
+Un año tiene 525 600 minutos, por lo que:
+`525 600 x 0.999 = 525074.4 `
+Al restar este resultado del total anual se obtiene el tiempo de inactividad permitido:
 - 43.8 min mensuales
 - 525.6 min anuales
 
@@ -193,7 +197,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 - Cloud: Proporciona almacenamiento centralizado, versionado y recuperación de recursos multimedia, además de controlar permisos de acceso entre dominios.
 
-**Diagrama DDD PromptAds**
+**Diagrama DDD PromptContent**
 
 ![DDD diagram](/Prompcontent.png)
 
