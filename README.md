@@ -252,10 +252,5 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 ### Business Domain (Global)
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
 
-### Integration for Extern Services Domain (Global)
-Este dominio le permite la integración de aplicaciones o servicios externos a los demás dominios.
-
-Plataformas como HubSpot, Salesforce, Zendesk, WhatsApp Business API, Google Ads, Meta Ads, TikTok for Business, Mailchimp, Canva, Adobe, Meta Business Suite y OpenAI API, etc...
-
-Así como servicios de pago como PayPal, o de seguridad como Owasp.
-
+**Diagrama DDD PromptSales**
+![DDD diagram](/promptSalesDDDdiagram.png)
