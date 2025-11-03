@@ -32,7 +32,7 @@ Si 1 worker puede realizar 13,33 req/s, ¿Cuántos se necesitan para llegar a la
 
 *Según la regla de 3* ~ 125
 
-Configuraremos 16 instancias de `c5.2xlarge` AWS, cada una con 8 workers.
+Utilizaremos 16 instancias de la máquina `r7i.2xlarge` (cada una tiene 8 workers) esta nos permite cumplir con los requerimientos no funcionales relacionados a Performance y también los relacionados a Scalability.
 
 ### Scalability
 
