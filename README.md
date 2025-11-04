@@ -254,3 +254,6 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 
 **Diagrama DDD PromptSales**
 ![DDD diagram](/promptSalesDDDdiagram.png)
+
+# Entregable 2 del Caso 2 | Diseño de Software
+
