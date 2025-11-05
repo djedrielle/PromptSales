@@ -2,7 +2,7 @@
 
 ### Desarrollado por
 * Djedrielle Alexander
-* Sebastian Chacón
+* Sebastian Muñoz
 * Isaac Gamboa
 
 ## Métricas de los requerimientos no funcionales
