@@ -201,7 +201,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptContent**
 
-![DDD diagram](/Promptcontent)
+![DDD diagram](/Promptcontent.png)
 
 ### PromptAds Domains
 
