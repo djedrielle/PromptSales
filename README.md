@@ -225,7 +225,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptAds**
 
-![DDD diagram](/DiagramaDDDCorregido(1).png)
+![DDD diagram](/DiagramaDDDCorregido.drawio%20(1).png)
 
 Se pueden observar la estructura de carpetas basada en este Domain Driven Design para PromptAds, asi como tambien plantillas de codigo de alguno elementos importantes como facades, contracts, use_cases y tests en la siguiente ruta -> [Organizacion y Plantillas](/PromptAds/)
 
