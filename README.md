@@ -2,7 +2,7 @@
 
 ### Desarrollado por
 * Djedrielle Alexander
-* Sebastian Chacón
+* Sebastian Muñoz
 * Isaac Gamboa
 
 ## Métricas de los requerimientos no funcionales
@@ -201,7 +201,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptContent**
 
-![DDD diagram](/Prompcontent.png)
+![DDD diagram](/Promptcontent.png)
 
 ### PromptAds Domains
 
