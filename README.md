@@ -266,4 +266,4 @@ Diagrama de arquitectura. De momento se adjuntan tres imágenes del diagrama est
 ![DDD diagram](/Caso2-Entregable2-Arqui.jpg)
 
 ## Design Patterns
-![DDD diagram](/Caso2-Entregable2-Patron.jpg)
+![DDD diagram](/Caso2-Entregable2-Patrones.jpg)
