@@ -1,5 +1,3 @@
-# Entregable 1 del Caso 2 | Diseño de Software
-
 ### Desarrollado por
 * Djedrielle Alexander
 * Sebastian Muñoz
@@ -201,7 +199,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptContent**
 
-![DDD diagram](/Promptcontent.png)
+![DDD diagram](/diagrams/Promptcontent.png)
 
 ### PromptAds Domains
 
@@ -225,7 +223,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptAds**
 
-![DDD diagram](/DiagramaDDDCorregido.drawio%20(1).png)
+![DDD diagram](/diagrams/diagrams/DiagramaDDDCorregido.drawio%20(1).png)
 
 Se pueden observar la estructura de carpetas basada en este Domain Driven Design para PromptAds, asi como tambien plantillas de codigo de alguno elementos importantes como facades, contracts, use_cases y tests en la siguiente ruta -> [Organizacion y Plantillas](/PromptAds/)
 
@@ -247,23 +245,61 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 
 **Diagrama DDD PromptCrm**
 
-![DDD diagram](/promptCrmDDDdiagram.png)
+![DDD diagram](/diagrams/promptCrmDDDdiagram.png)
 
 ### Business Domain (Global)
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
 
 **Diagrama DDD PromptSales**
-![DDD diagram](/promptSalesDDDdiagram.png)
+![DDD diagram](/diagrams/promptSalesDDDdiagram.png)
 
-# Entregable 2 | Diseño de Software
+### Convivencia entre Dominios
+El sistema usa Domain Driven Design con separación lógica de dominios.
+La comunicación entre dominios se realiza por la Client Layer (Anti-Corruption Layer), evitando acoplamiento directo.
+No se usan microservicios; la separación es interna dentro del mismo proceso.
 
-Diagrama de arquitectura. De momento se adjuntan tres imágenes del diagrama esto para que se pueda leer bien y también se pueda observar toda su estructura, en futuras correcciones lo acomodaremos mejor.
+### Tecnologías
+- Python: Lenguaje base del backend para todos los dominios.
+- Django + DRF: Framework usado para exponer las REST APIs de cada dominio siguiendo DDD (viewsets, facades y clients).
+- Aurora PostgreSQL / MySQL
+    - PostgreSQL: datos de PromptAds y PromptCrm.
+    - MySQL: datos de Global Domains (suscripciones, planes, billing).
+- MongoDB Atlas: Base del dominio PromptContent para briefs, configuraciones y metadatos creativos.
+- Redis (ElastiCache): Cache compartido para respuestas rápidas, tokens temporales y soporte a rate limiting / eventos.
+- EKS + EC2 r7i.2xlarge: Clúster donde corren los pods.
+- Application Load Balancer (ALB): Balancea tráfico HTTPS hacia EKS y aplica health checks.
+- CloudWatch + Alarms + SNS: Monitoreo centralizado y alertas automáticas para cualquier dominio (logs, métricas y notificaciones).
+- Okta: Identity Provider externo para SSO y emisión de tokens OIDC.
+- TLS (ACM): Certificados administrados por AWS para cifrado HTTPS.
+- Prometheus Adapter: Expone métricas al HPA para autoescalado (CPU, memoria, requests en vuelo).
+- GitHub + GitHub Actions: Control de versiones, CI/CD y despliegue automatizado al clúster EKS.
+- Cognito: Gestión del acceso en el API Gateway valida tokens y pasa claims a los dominios sin acoplar la lógica de autenticación.
+- Vercel: Plataforma de despliegue para el portal web.
+### Versionamiento 
+El versionamiento se hace a nivel de API y deployment, no solo de ramas.
+
+Cada dominio expone endpoints versionados por ruta, por ejemplo:
+- /api/promptcontent/v1/...
+- /api/promptcontent/v2/...
+
+AWS API Gateway se encarga de enrutar cada versión a un backend distinto en AWS:
+
+- /v1 - servicio promptcontent-api-v1 en EKS
+- /v2 - servicio promptcontent-api-v2 en EKS
+
+Cuando se libera una versión nueva con cambios incompatibles (v2), la versión anterior (v1) se mantiene activa para que otros dominios sigan consumiéndola sin romperse.
+
+La compatibilidad se controla manteniendo múltiples versiones de la API vivas al mismo tiempo en API Gateway. La desactivación de una versión se hace de forma planificada (ventana de deprecación) cuando todos los consumidores ya migraron.
+
+GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, main), pero la compatibilidad entre versiones se garantiza en la capa de API Gateway + EKS manteniendo deployments separados por versión.
+
+### Diagrama de arquitectura
 
 ## Big Pic
-![DDD diagram](/Caso2-Entregable2-BigPic.jpg)
+![DDD diagram](/diagrams/Caso2-Entregable2-BigPic.jpg)
 
 ## Architecture
-![DDD diagram](/Caso2-Entregable2-Arqui.jpg)
+![DDD diagram](/diagrams/Caso2-Entregable2-Arqui.jpg)
 
 ## Design Patterns
-![DDD diagram](/Caso2-Entregable2-Patrones.jpg)
+![DDD diagram](/diagrams/Caso2-Entregable2-Patrones.jpg)
