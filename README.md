@@ -256,7 +256,7 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 ### Convivencia entre Dominios
 El sistema usa Domain Driven Design con separación lógica de dominios.
 La comunicación entre dominios se realiza por la Client Layer (Anti-Corruption Layer), evitando acoplamiento directo.
-No se usan microservicios; la separación es interna dentro del mismo proceso.
+No se usan microservicios, la separación es interna dentro del mismo proceso.
 
 ### Tecnologías
 - Python: Lenguaje base del backend para todos los dominios.
