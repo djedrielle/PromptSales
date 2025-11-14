@@ -253,11 +253,6 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 **Diagrama DDD PromptSales**
 ![DDD diagram](/diagrams/promptSalesDDDdiagram.png)
 
-### Convivencia entre Dominios
-El sistema usa Domain Driven Design con separación lógica de dominios.
-La comunicación entre dominios se realiza por la Client Layer (Anti-Corruption Layer), evitando acoplamiento directo.
-No se usan microservicios, la separación es interna dentro del mismo proceso.
-
 ### Tecnologías
 - Python: Lenguaje base del backend para todos los dominios.
 - Django + DRF: Framework usado para exponer las REST APIs de cada dominio siguiendo DDD (viewsets, facades y clients).
@@ -279,19 +274,36 @@ No se usan microservicios, la separación es interna dentro del mismo proceso.
 El versionamiento se hace a nivel de API y deployment, no solo de ramas.
 
 Cada dominio expone endpoints versionados por ruta, por ejemplo:
-- /api/promptcontent/v1/...
-- /api/promptcontent/v2/...
+- src/core/api/v1/brief/
+Si se necesita una nueva versión:
 
-AWS API Gateway se encarga de enrutar cada versión a un backend distinto en AWS:
+Se duplica la carpeta v1, crea v2, ahí modifica sin romper a nadie.
+- src/core/api/v2/brief/
 
-- /v1 - servicio promptcontent-api-v1 en EKS
-- /v2 - servicio promptcontent-api-v2 en EKS
+Cada versión se despliega como un servicio independiente:
 
-Cuando se libera una versión nueva con cambios incompatibles (v2), la versión anterior (v1) se mantiene activa para que otros dominios sigan consumiéndola sin romperse.
+`promptcontent-api-v1`
 
-La compatibilidad se controla manteniendo múltiples versiones de la API vivas al mismo tiempo en API Gateway. La desactivación de una versión se hace de forma planificada (ventana de deprecación) cuando todos los consumidores ya migraron.
+`promptcontent-api-v2`
+
+Se crea un nuevo deployment YAML: 
+```yaml
+metadata:
+  name: promptcontent-api-v2
+spec:
+  containers:
+    - image: promptsales/promptcontent:v2
+```
+
+El dev crea una nueva stage o base path mapping:
+
+- /api/promptcontent/v1 - promptcontent-api-v1
+- /api/promptcontent/v2 - promptcontent-api-v2
+
+el gateway enruta el tráfico a la versión correcta y ambas conviven.
 
 GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, main), pero la compatibilidad entre versiones se garantiza en la capa de API Gateway + EKS manteniendo deployments separados por versión.
+
 
 ### Diagrama de arquitectura
 
