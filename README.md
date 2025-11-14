@@ -316,3 +316,6 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 
 ## Design Patterns
 ![DDD diagram](/diagrams/Caso2-Entregable2-Patrones.jpg)
+
+## Otros Services relacionados al pub/sub model
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20184323.png)
