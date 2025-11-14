@@ -275,6 +275,7 @@ El versionamiento se hace a nivel de API y deployment, no solo de ramas.
 
 Cada dominio expone endpoints versionados por ruta, por ejemplo:
 - src/core/api/v1/brief/
+  
 Si se necesita una nueva versión:
 
 Se duplica la carpeta v1, crea v2, ahí modifica sin romper a nadie.
