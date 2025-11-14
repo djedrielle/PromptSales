@@ -309,7 +309,7 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 ### Diagrama de arquitectura
 
 ## Big Pic
-![DDD diagram](/diagrams/Caso2-Entregable2-BigPic.jpg)
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20184323.png)
 
 ## Architecture
 ![DDD diagram](/diagrams/Caso2-Entregable2-Arqui.jpg)
