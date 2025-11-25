@@ -257,8 +257,6 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 
 # Entregable 2 | Diseño de Software
 
-Diagrama de arquitectura. De momento se adjuntan tres imágenes del diagrama esto para que se pueda leer bien y también se pueda observar toda su estructura, en futuras correcciones lo acomodaremos mejor.
-
 ## Big Pic
 ![DDD diagram](/Caso2-Entregable2-BigPic.jpg)
 
