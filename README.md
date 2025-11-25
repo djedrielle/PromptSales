@@ -1,5 +1,3 @@
-# Entregable 1 del Caso 2 | Diseño de Software
-
 ### Desarrollado por
 * Djedrielle Alexander
 * Sebastian Muñoz
@@ -201,7 +199,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptContent**
 
-![DDD diagram](/Promptcontent.png)
+![DDD diagram](/diagrams/Promptcontent.png)
 
 ### PromptAds Domains
 
@@ -225,7 +223,7 @@ En futuras versiones el alcance de esta arquitectura se puede extender conectand
 
 **Diagrama DDD PromptAds**
 
-![DDD diagram](/DiagramaDDDPromptAds.drawio%20(1).png)
+![DDD diagram](/diagrams/DiagramaDDDCorregido.drawio%20(1).png)
 
 Se pueden observar la estructura de carpetas basada en este Domain Driven Design para PromptAds, asi como tambien plantillas de codigo de alguno elementos importantes como facades, contracts, use_cases y tests en la siguiente ruta -> [Organizacion y Plantillas](/PromptAds/)
 
@@ -247,21 +245,79 @@ Este dominio se encarga principalmente del monitoreo de leads. Estos se registra
 
 **Diagrama DDD PromptCrm**
 
-![DDD diagram](/promptCrmDDDdiagram.png)
+![DDD diagram](/diagrams/promptCrmDDDdiagram.png)
 
 ### Business Domain (Global)
 Este dominio se encarga de validar qué funcionalidades de la plataforma el usuario es capaz de utilizar, esto va a depender del plan al que este se haya suscrito. También se encarga de gestionar todo lo relacionado con pagos por parte del usuario.
 
 **Diagrama DDD PromptSales**
-![DDD diagram](/promptSalesDDDdiagram.png)
+![DDD diagram](/diagrams/promptSalesDDDdiagram.png)
 
-# Entregable 2 | Diseño de Software
+### Tecnologías
+- Python: Lenguaje base del backend para todos los dominios.
+- Django + DRF: Framework usado para exponer las REST APIs de cada dominio siguiendo DDD (viewsets, facades y clients).
+- Aurora PostgreSQL / MySQL
+    - PostgreSQL: datos de PromptAds y PromptCrm.
+    - MySQL: datos de Global Domains (suscripciones, planes, billing).
+- MongoDB Atlas: Base del dominio PromptContent para briefs, configuraciones y metadatos creativos.
+- Redis (ElastiCache): Cache compartido para respuestas rápidas, tokens temporales y soporte a rate limiting / eventos.
+- EKS + EC2 r7i.2xlarge: Clúster donde corren los pods.
+- Application Load Balancer (ALB): Balancea tráfico HTTPS hacia EKS y aplica health checks.
+- CloudWatch + Alarms + SNS: Monitoreo centralizado y alertas automáticas para cualquier dominio (logs, métricas y notificaciones).
+- Okta: Identity Provider externo para SSO y emisión de tokens OIDC.
+- TLS (ACM): Certificados administrados por AWS para cifrado HTTPS.
+- Prometheus Adapter: Expone métricas al HPA para autoescalado (CPU, memoria, requests en vuelo).
+- GitHub + GitHub Actions: Control de versiones, CI/CD y despliegue automatizado al clúster EKS.
+- Cognito: Gestión del acceso en el API Gateway valida tokens y pasa claims a los dominios sin acoplar la lógica de autenticación.
+- Vercel: Plataforma de despliegue para el portal web.
+### Versionamiento 
+El versionamiento se hace a nivel de API y deployment, no solo de ramas.
 
+<<<<<<< HEAD
+=======
+Cada dominio expone endpoints versionados por ruta, por ejemplo:
+- src/core/api/v1/brief/
+  
+Si se necesita una nueva versión:
+
+Se duplica la carpeta v1, crea v2, ahí modifica sin romper a nadie.
+- src/core/api/v2/brief/
+
+Cada versión se despliega como un servicio independiente:
+
+`promptcontent-api-v1`
+
+`promptcontent-api-v2`
+
+Se crea un nuevo deployment YAML: 
+```yaml
+metadata:
+  name: promptcontent-api-v2
+spec:
+  containers:
+    - image: promptsales/promptcontent:v2
+```
+
+El dev crea una nueva stage o base path mapping:
+
+- /api/promptcontent/v1 - promptcontent-api-v1
+- /api/promptcontent/v2 - promptcontent-api-v2
+
+el gateway enruta el tráfico a la versión correcta y ambas conviven.
+
+GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, main), pero la compatibilidad entre versiones se garantiza en la capa de API Gateway + EKS manteniendo deployments separados por versión.
+
+
+### Diagrama de arquitectura
+
+>>>>>>> b4d3d9f94117e6782e32b884b61cc49f3130ddd9
 ## Big Pic
-![DDD diagram](/Caso2-Entregable2-BigPic.jpg)
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)
 
-## Architecture
-![DDD diagram](/Caso2-Entregable2-Arqui.jpg)
 
-## Design Patterns
-![DDD diagram](/Caso2-Entregable2-Patrones.jpg)
+
+## Otros Services relacionados al pub/sub model
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20184323.png)
+
+## Link a Miro 
+https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0aEdSdVhrdFkvZXAxR0REMExaODVLMlk4eHBJc0FzZWZFU3o3cUJGU0ppbGprdmNaeGNWSlE0U09TUnRlN0V4Wml6cmJzRnRnMUkyVmw2OHo2Vlc5SncrYldYd2p3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=516617271561
