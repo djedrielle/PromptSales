@@ -130,23 +130,23 @@ To centralize analytics in the PromptSales database without querying operational
 ```mermaid
 graph LR
     subgraph "Sources"
-        AdsDB[(PromptAds DB)]
-        CrmDB[(PromptCrm DB)]
-        ContentDB[(PromptContent DB)]
+        AdsDB[("PromptAds DB")]
+        CrmDB[("PromptCrm DB")]
+        ContentDB[("PromptContent DB")]
     end
 
     subgraph "Ingestion (CDC / Polling)"
-        Debezium[Debezium (CDC)]
-        BatchJob[Scheduled Batch Jobs]
+        Debezium["Debezium (CDC)"]
+        BatchJob["Scheduled Batch Jobs"]
     end
 
     subgraph "Processing"
-        Kafka[Apache Kafka / Event Bus]
-        Spark[Spark / Stream Processing]
+        Kafka["Apache Kafka / Event Bus"]
+        Spark["Spark / Stream Processing"]
     end
 
     subgraph "Destination"
-        DW[(PromptSales Data Warehouse)]
+        DW[("PromptSales Data Warehouse")]
     end
 
     AdsDB -->|CDC Changes| Debezium
