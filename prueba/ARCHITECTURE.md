@@ -7,12 +7,12 @@ This diagram illustrates the interaction between the central PromptSales Portal 
 ```mermaid
 graph TD
     subgraph "PromptSales Ecosystem"
-        Portal[PromptSales Portal (Web/Vercel)]
+        Portal["PromptSales Portal (Web/Vercel)"]
         
         subgraph "Sub-Companies"
-            Content[PromptContent System]
-            Ads[PromptAds System]
-            CRM[PromptCrm System]
+            Content["PromptContent System"]
+            Ads["PromptAds System"]
+            CRM["PromptCrm System"]
         end
         
         Portal -->|HTTP/REST/MCP| Content
@@ -25,10 +25,10 @@ graph TD
     end
 
     subgraph "External Services"
-        AI_Models[AI Models (OpenAI, etc.)]
-        Social_Media[Social Media (Meta, TikTok)]
-        Ad_Platforms[Ad Platforms (Google Ads)]
-        Ext_CRM[External CRMs (HubSpot, Salesforce)]
+        AI_Models["AI Models (OpenAI, etc.)"]
+        Social_Media["Social Media (Meta, TikTok)"]
+        Ad_Platforms["Ad Platforms (Google Ads)"]
+        Ext_CRM["External CRMs (HubSpot, Salesforce)"]
     end
 
     Content -->|API| AI_Models
@@ -46,38 +46,38 @@ This diagram details the deployment strategy using Kubernetes for backend servic
 ```mermaid
 graph TD
     subgraph "Client Layer"
-        User[User / Browser]
+        User["User / Browser"]
     end
 
     subgraph "Frontend Layer (Vercel)"
-        NextApp[Next.js App (PromptSales Portal)]
-        AdminPanel[Admin Panels]
+        NextApp["Next.js App (PromptSales Portal)"]
+        AdminPanel["Admin Panels"]
     end
 
     subgraph "Cloud Infrastructure (AWS)"
-        LB[Load Balancer (ALB)]
+        LB["Load Balancer (ALB)"]
         
         subgraph "Kubernetes Cluster (EKS)"
             subgraph "Services Namespace"
-                API_Gateway[API Gateway / Ingress]
-                Auth_Service[Auth Service (OAuth 2.0)]
+                API_Gateway["API Gateway / Ingress"]
+                Auth_Service["Auth Service (OAuth 2.0)"]
                 
-                Content_Svc[PromptContent Service]
-                Ads_Svc[PromptAds Service]
-                CRM_Svc[PromptCrm Service]
+                Content_Svc["PromptContent Service"]
+                Ads_Svc["PromptAds Service"]
+                CRM_Svc["PromptCrm Service"]
                 
-                MCP_Orchestrator[MCP Orchestrator]
+                MCP_Orchestrator["MCP Orchestrator"]
             end
             
             subgraph "Workers Namespace"
-                Job_Queue[Job Queue Workers]
+                Job_Queue["Job Queue Workers"]
             end
         end
         
         subgraph "Data Layer"
-            Redis[(Redis Cache - ElastiCache)]
-            Postgres[(PostgreSQL - Aurora)]
-            Mongo[(MongoDB - Atlas)]
+            Redis[("Redis Cache - ElastiCache")]
+            Postgres[("PostgreSQL - Aurora")]
+            Mongo[("MongoDB - Atlas")]
         end
     end
 
@@ -114,21 +114,21 @@ This diagram focuses on how MCP servers are used to interconnect the sub-compani
 ```mermaid
 graph LR
     subgraph "MCP Clients"
-        Portal_Agent[Portal AI Agent]
-        Dev_Tool[Developer Tooling]
+        Portal_Agent["Portal AI Agent"]
+        Dev_Tool["Developer Tooling"]
     end
 
     subgraph "MCP Layer"
-        Analytics_MCP[Analytics MCP Server]
-        Content_MCP[Content MCP Server]
-        Ads_MCP[Ads MCP Server]
-        CRM_MCP[CRM MCP Server]
+        Analytics_MCP["Analytics MCP Server"]
+        Content_MCP["Content MCP Server"]
+        Ads_MCP["Ads MCP Server"]
+        CRM_MCP["CRM MCP Server"]
     end
 
     subgraph "Backend Systems"
-        Content_DB[(Content DB)]
-        Ads_DB[(Ads DB)]
-        CRM_DB[(CRM DB)]
+        Content_DB[("Content DB")]
+        Ads_DB[("Ads DB")]
+        CRM_DB[("CRM DB")]
     end
 
     Portal_Agent -->|Query| Analytics_MCP
