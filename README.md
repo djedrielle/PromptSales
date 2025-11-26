@@ -34,7 +34,7 @@ Utilizaremos 16 instancias de la máquina `r7i.2xlarge` (cada una tiene 8 worker
 
 ### Scalability
 
-* REST + Django + MySQL
+* REST + Django + SQL Server
 
 * utilizando una máquina Microsoft Windows con una CPU Intel Xeon E3-1230 (4 núcleos físicos, 8 hiperprocesos) y 24 GB de memoria, usando 4 CPUs se obtienen 691,66 req/s como lo podemos ver en el [benchmark](https://www.augmentedmind.de/2024/07/14/go-vs-python-performance-benchmark/#:~:text=This%20article%20benchmarks%20the%20performance,than%20for%20both%20Python%20frameworks)
 
@@ -87,7 +87,7 @@ Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/
 
 **Bases de datos**
 
-Para las bases de datos PostgreSQL y MySQL se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+Para las bases de datos PostgreSQL y SQL Server se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
 - Aurora Multi-AZ (writer + reader)
 - RPO objetivo: ≈ 0 s
 - RTO objetivo (failover): ≤ 60 s (conmutación automática a réplica).
@@ -256,9 +256,9 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 ### Tecnologías
 - Python: Lenguaje base del backend para todos los dominios.
 - Django + DRF: Framework usado para exponer las REST APIs de cada dominio siguiendo DDD (viewsets, facades y clients).
-- Aurora PostgreSQL / MySQL
-    - PostgreSQL: datos de PromptAds y PromptCrm.
-    - MySQL: datos de Global Domains (suscripciones, planes, billing).
+- Aurora PostgreSQL / SQL Server
+    - PostgreSQL: datos de PromptAds.
+    - SQL Server: PromptCrm y datos de Global Domains (suscripciones, planes, billing).
 - MongoDB Atlas: Base del dominio PromptContent para briefs, configuraciones y metadatos creativos.
 - Redis (ElastiCache): Cache compartido para respuestas rápidas, tokens temporales y soporte a rate limiting / eventos.
 - EKS + EC2 r7i.2xlarge: Clúster donde corren los pods.
