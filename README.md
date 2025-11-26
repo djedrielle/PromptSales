@@ -274,8 +274,7 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 ### Versionamiento 
 El versionamiento se hace a nivel de API y deployment, no solo de ramas.
 
-<<<<<<< HEAD
-=======
+
 Cada dominio expone endpoints versionados por ruta, por ejemplo:
 - src/core/api/v1/brief/
   
@@ -311,7 +310,7 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 
 ### Diagrama de arquitectura
 
->>>>>>> b4d3d9f94117e6782e32b884b61cc49f3130ddd9
+
 ## Big Pic
 ![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)
 
