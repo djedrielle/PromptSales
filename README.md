@@ -2,6 +2,7 @@
 * Djedrielle Alexander
 * Sebastian Muñoz
 * Isaac Gamboa
+* Josue Salazar
 
 ## Métricas de los requerimientos no funcionales
 
