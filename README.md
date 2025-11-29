@@ -327,15 +327,15 @@ https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0
 
 ## 1. Ubicación de Configuración
 
-*   **Directorio Raíz**: `prueba/mcp-servers/analytics-server/`
+*   **Directorio Raíz**: `mcp/`
 *   **Punto de Entrada**: [`index.ts`](./index.ts) - Contiene toda la lógica del servidor, definición de herramientas y manejo de peticiones.
 *   **Gestión de Paquetes**: [`package.json`](./package.json) - Define las dependencias, específicamente el SDK de MCP (`@modelcontextprotocol/sdk`).
-*   **Configuración de Ejecución**: El servidor está diseñado para ejecutarse sobre `stdio`.
+*   **Configuración de Ejecución**: El MCP server está diseñado para ejecutarse sobre `stdio`.
 
 ## 2. Reglas y Principios de Diseño
 
-*   **Transporte Stdio**: El servidor lee JSON-RPC de `stdin` y escribe en `stdout`. Los logs de depuración deben ir siempre a `stderr` para no romper el protocolo.
-*   **Statelessness (Sin Estado)**: El servidor procesa cada petición de forma independiente. No mantiene estado de sesión entre llamadas a herramientas.
+*   **Transporte Stdio**: El MCP server lee JSON-RPC de `stdin` y escribe en `stdout`. Los logs de depuración deben ir siempre a `stderr` para no romper el protocolo.
+*   **Statelessness (Sin Estado)**: El MCP server procesa cada petición de forma independiente. No mantiene estado de sesión entre llamadas a herramientas.
 *   **Preparado para Producción**: Aunque actualmente usa un placeholder para la base de datos (`executeQuery`), la estructura de las herramientas y las consultas SQL simuladas están diseñadas para conectarse directamente a una base de datos relacional (como PostgreSQL) sin cambiar la interfaz de las herramientas.
 *   **Tipado Fuerte**: Se utiliza TypeScript para definir los esquemas de entrada y garantizar la seguridad de tipos en los argumentos.
 
