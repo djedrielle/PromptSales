@@ -139,7 +139,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "get_campaign_performance": {
                 // Example SQL: SELECT * FROM campaign_metrics WHERE ...
                 result = await executeQuery(
-                    "SELECT * FROM campaign_metrics WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
+                    "SELECT * FROM PCRCampaigns WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
                     args
                 );
                 break;
@@ -148,7 +148,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "get_sales_data": {
                 // Example SQL: SELECT sum(amount) as total_sales, count(*) as conversions FROM sales WHERE ...
                 result = await executeQuery(
-                    "SELECT * FROM sales_data WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
+                    "SELECT * FROM PCRSalesHistory WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
                     args
                 );
                 break;
@@ -157,7 +157,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "get_campaign_reach": {
                 // Example SQL: SELECT reach, unique_views FROM campaign_reach WHERE ...
                 result = await executeQuery(
-                    "SELECT * FROM campaign_reach WHERE campaign_name = $1",
+                    "SELECT * FROM PCRCampaignReach WHERE campaign_name = $1",
                     args
                 );
                 break;
@@ -166,7 +166,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "get_campaign_channels": {
                 // Example SQL: SELECT DISTINCT channel FROM campaign_placements WHERE ...
                 result = await executeQuery(
-                    "SELECT channel_name, platform FROM campaign_channels WHERE campaign_name = $1",
+                    "SELECT * FROM PCREvents WHERE campaign_name = $1",
                     args
                 );
                 break;
@@ -175,7 +175,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "get_campaign_locations": {
                 // Example SQL: SELECT country, city, impressions FROM campaign_geo_stats WHERE ...
                 result = await executeQuery(
-                    "SELECT location, impressions FROM campaign_metrics WHERE campaign_name = $1 GROUP BY location",
+                    "SELECT * FROM PCRAddresses WHERE campaign_name = $1",
                     args
                 );
                 break;
