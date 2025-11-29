@@ -7,14 +7,10 @@ import {
     ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-// Mock Data for Analytics
-const CAMPAIGN_DATA = [
-    { id: "c1", name: "Summer Sale", impressions: 15000, clicks: 450, conversions: 20, spend: 500 },
-    { id: "c2", name: "Tech Launch", impressions: 50000, clicks: 1200, conversions: 85, spend: 2000 },
-    { id: "c3", name: "Brand Awareness", impressions: 100000, clicks: 300, conversions: 5, spend: 1000 },
-];
+// Database connection placeholder
+// In the future, import your DB client here (e.g., pg, prisma, mongoose)
+// const db = new DatabaseClient(...);
 
-// Create the MCP Server
 const server = new Server(
     {
         name: "promptsales-analytics",
@@ -28,42 +24,105 @@ const server = new Server(
 );
 
 /**
- * Tool: query_analytics
- * Description: Retrieves campaign performance metrics based on parameters.
- * In a real scenario, this would parse natural language or SQL.
+ * Helper function to simulate DB query execution
+ * This serves as a placeholder for the actual database integration.
  */
+async function executeQuery(query: string, params: any) {
+    // TODO: Implement actual database query execution
+    // const result = await db.query(query, params);
+    // return result;
+
+    console.error(`[DB Query Placeholder] Executing: ${query} with params:`, params);
+    return { message: "Database connection not implemented yet. This is a placeholder response." };
+}
+
 server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
         tools: [
             {
                 name: "get_campaign_performance",
-                description: "Get performance metrics for campaigns. Can filter by name or get all.",
+                description: "Retrieves general performance metrics for campaigns (impressions, clicks, CTR, etc.).",
                 inputSchema: {
                     type: "object",
                     properties: {
                         campaignName: {
                             type: "string",
-                            description: "Optional name of the campaign to filter by",
+                            description: "Optional name of the campaign to filter by.",
                         },
-                        metric: {
+                        startDate: {
                             type: "string",
-                            description: "Specific metric to retrieve (impressions, clicks, conversions, spend)",
+                            description: "Start date for the metrics (ISO format).",
+                        },
+                        endDate: {
+                            type: "string",
+                            description: "End date for the metrics (ISO format).",
                         },
                     },
                 },
             },
             {
-                name: "analyze_roi",
-                description: "Calculates ROI for a specific campaign.",
+                name: "get_sales_data",
+                description: "Retrieves sales and conversion data attributed to marketing campaigns.",
                 inputSchema: {
                     type: "object",
                     properties: {
-                        campaignId: {
+                        campaignName: {
                             type: "string",
-                            description: "ID of the campaign",
+                            description: "Optional name of the campaign to filter by.",
+                        },
+                        startDate: {
+                            type: "string",
+                            description: "Start date for the sales data (ISO format).",
+                        },
+                        endDate: {
+                            type: "string",
+                            description: "End date for the sales data (ISO format).",
                         },
                     },
-                    required: ["campaignId"],
+                },
+            },
+            {
+                name: "get_campaign_reach",
+                description: "Retrieves the reach and unique audience metrics for campaigns.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        campaignName: {
+                            type: "string",
+                            description: "Optional name of the campaign to filter by.",
+                        },
+                    },
+                },
+            },
+            {
+                name: "get_campaign_channels",
+                description: "Retrieves the list of channels (Social Media, Email, Web, etc.) where campaigns are published.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        campaignName: {
+                            type: "string",
+                            description: "Optional name of the campaign to filter by.",
+                        },
+                    },
+                },
+            },
+            {
+                name: "get_campaign_locations",
+                description: "Retrieves geographic distribution data (cities, countries) for campaign delivery.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        campaignName: {
+                            type: "string",
+                            description: "Optional name of the campaign to filter by.",
+                        },
+                        granularity: {
+                            type: "string",
+                            enum: ["country", "city"],
+                            description: "Level of geographic detail required.",
+                        },
+                    },
                 },
             },
         ],
@@ -73,53 +132,81 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
 
-    if (name === "get_campaign_performance") {
-        const campaignName = args?.campaignName as string | undefined;
+    try {
+        let result;
 
-        let results = CAMPAIGN_DATA;
-        if (campaignName) {
-            results = results.filter(c => c.name.toLowerCase().includes(campaignName.toLowerCase()));
+        switch (name) {
+            case "get_campaign_performance": {
+                // Example SQL: SELECT * FROM campaign_metrics WHERE ...
+                result = await executeQuery(
+                    "SELECT * FROM campaign_metrics WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
+                    args
+                );
+                break;
+            }
+
+            case "get_sales_data": {
+                // Example SQL: SELECT sum(amount) as total_sales, count(*) as conversions FROM sales WHERE ...
+                result = await executeQuery(
+                    "SELECT * FROM sales_data WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
+                    args
+                );
+                break;
+            }
+
+            case "get_campaign_reach": {
+                // Example SQL: SELECT reach, unique_views FROM campaign_reach WHERE ...
+                result = await executeQuery(
+                    "SELECT * FROM campaign_reach WHERE campaign_name = $1",
+                    args
+                );
+                break;
+            }
+
+            case "get_campaign_channels": {
+                // Example SQL: SELECT DISTINCT channel FROM campaign_placements WHERE ...
+                result = await executeQuery(
+                    "SELECT channel_name, platform FROM campaign_channels WHERE campaign_name = $1",
+                    args
+                );
+                break;
+            }
+
+            case "get_campaign_locations": {
+                // Example SQL: SELECT country, city, impressions FROM campaign_geo_stats WHERE ...
+                result = await executeQuery(
+                    "SELECT location, impressions FROM campaign_metrics WHERE campaign_name = $1 GROUP BY location",
+                    args
+                );
+                break;
+            }
+
+            default:
+                throw new Error(`Tool not found: ${name}`);
         }
 
         return {
             content: [
                 {
                     type: "text",
-                    text: JSON.stringify(results, null, 2),
+                    text: JSON.stringify(result, null, 2),
                 },
             ],
         };
-    }
 
-    if (name === "analyze_roi") {
-        const campaignId = args?.campaignId as string;
-        const campaign = CAMPAIGN_DATA.find(c => c.id === campaignId);
-
-        if (!campaign) {
-            return {
-                content: [{ type: "text", text: `Campaign ${campaignId} not found.` }],
-                isError: true,
-            };
-        }
-
-        // Simple ROI: (Revenue - Cost) / Cost. Assuming Conversion Value = $100 for demo.
-        const revenue = campaign.conversions * 100;
-        const roi = ((revenue - campaign.spend) / campaign.spend) * 100;
-
+    } catch (error: any) {
         return {
             content: [
                 {
                     type: "text",
-                    text: `ROI Analysis for ${campaign.name}:\nSpend: $${campaign.spend}\nRevenue (est): $${revenue}\nROI: ${roi.toFixed(2)}%`,
+                    text: `Error executing tool ${name}: ${error.message}`,
                 },
             ],
+            isError: true,
         };
     }
-
-    throw new Error(`Tool not found: ${name}`);
 });
 
-// Start the server
 async function run() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
