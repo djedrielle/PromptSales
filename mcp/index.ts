@@ -6,10 +6,75 @@ import {
     CallToolRequestSchema,
     ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import sql from 'mssql';
 
-// Database connection placeholder
-// In the future, import your DB client here (e.g., pg, prisma, mongoose)
-// const db = new DatabaseClient(...);
+// SQL Server configuration
+const dbConfig: sql.config = {
+    user: process.env.DB_USER || 'sa',
+    password: process.env.DB_PASS || 'PromptSales!2025',
+    server: process.env.DB_HOST || 'promptsales-db',
+    database: process.env.DB_NAME || 'PromptAds',
+    port: 1433,
+    options: {
+        encrypt: false, // Para desarrollo local
+        trustServerCertificate: true,
+        enableArithAbort: true,
+    },
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000
+    }
+};
+
+// Pool de conexiones
+let pool: sql.ConnectionPool | null = null;
+
+/**
+ * Inicializa el pool de conexiones
+ */
+async function initializeDatabase() {
+    try {
+        pool = await sql.connect(dbConfig);
+        console.error('✓ Connected to SQL Server successfully');
+    } catch (error: any) {
+        console.error('✗ Database connection failed:', error.message);
+        throw error;
+    }
+}
+
+/**
+ * Ejecuta una consulta SQL con parámetros
+ */
+async function executeQuery(query: string, params: any = {}) {
+    if (!pool) {
+        throw new Error('Database pool not initialized');
+    }
+
+    try {
+        const request = pool.request();
+
+        // Agregar parámetros a la consulta
+        if (params.campaignName) {
+            request.input('campaignName', sql.NVarChar, params.campaignName);
+        }
+        if (params.startDate) {
+            request.input('startDate', sql.DateTime, params.startDate);
+        }
+        if (params.endDate) {
+            request.input('endDate', sql.DateTime, params.endDate);
+        }
+        if (params.granularity) {
+            request.input('granularity', sql.NVarChar, params.granularity);
+        }
+
+        const result = await request.query(query);
+        return result.recordset;
+    } catch (error: any) {
+        console.error('Query execution error:', error.message);
+        throw error;
+    }
+}
 
 const server = new Server(
     {
@@ -22,19 +87,6 @@ const server = new Server(
         },
     }
 );
-
-/**
- * Helper function to simulate DB query execution
- * This serves as a placeholder for the actual database integration.
- */
-async function executeQuery(query: string, params: any) {
-    // TODO: Implement actual database query execution
-    // const result = await db.query(query, params);
-    // return result;
-
-    console.error(`[DB Query Placeholder] Executing: ${query} with params:`, params);
-    return { message: "Database connection not implemented yet. This is a placeholder response." };
-}
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -130,54 +182,126 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 });
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
+    const { name } = request.params;
+    const args = (request.params.arguments || {}) as any;
+
+    console.error(`[MCP] Received request for tool: ${name} with args:`, JSON.stringify(args));
 
     try {
         let result;
+        let query: string;
 
         switch (name) {
             case "get_campaign_performance": {
-                // Example SQL: SELECT * FROM campaign_metrics WHERE ...
-                result = await executeQuery(
-                    "SELECT * FROM PCRCampaigns WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
-                    args
-                );
+                query = `
+                    SELECT 
+                        c.CampaignCode,
+                        c.CampaignName as CampaignName,
+                        m.Date,
+                        m.Impressions,
+                        m.Clicks,
+                        CASE WHEN m.Impressions > 0 
+                            THEN CAST(m.Clicks AS FLOAT) / m.Impressions * 100 
+                            ELSE 0 
+                        END as CTR,
+                        m.Spend as Cost,
+                        m.Conversions
+                    FROM PACampaignDailyMetrics m
+                    INNER JOIN PCRCampaigns c ON m.IdCampaign = c.IdCampaign
+                    WHERE 1=1
+                    ${args.campaignName ? "AND c.CampaignCode = @campaignName" : ""}
+                    ${args.startDate ? "AND m.Date >= @startDate" : ""}
+                    ${args.endDate ? "AND m.Date <= @endDate" : ""}
+                    ORDER BY m.Date DESC
+                `;
+                result = await executeQuery(query, args);
                 break;
             }
 
             case "get_sales_data": {
-                // Example SQL: SELECT sum(amount) as total_sales, count(*) as conversions FROM sales WHERE ...
-                result = await executeQuery(
-                    "SELECT * FROM PCRSalesHistory WHERE campaign_name = $1 AND date BETWEEN $2 AND $3",
-                    args
-                );
+                query = `
+                    SELECT 
+                        c.CampaignCode,
+                        c.CampaignName as CampaignName,
+                        s.CreatedAt,
+                        s.SaleTotal as SaleAmount,
+                        cl.ClientCode as CustomerCode
+                    FROM PASalesHistory s
+                    INNER JOIN PCRCampaigns c ON s.IdCampaign = c.IdCampaign
+                    INNER JOIN PCRClients cl ON s.IdClient = cl.IdClient
+                    WHERE 1=1
+                    ${args.campaignName ? "AND c.CampaignCode = @campaignName" : ""}
+                    ${args.startDate ? "AND s.CreatedAt >= @startDate" : ""}
+                    ${args.endDate ? "AND s.CreatedAt <= @endDate" : ""}
+                    ORDER BY s.CreatedAt DESC
+                `;
+                result = await executeQuery(query, args);
                 break;
             }
 
             case "get_campaign_reach": {
-                // Example SQL: SELECT reach, unique_views FROM campaign_reach WHERE ...
-                result = await executeQuery(
-                    "SELECT * FROM PCRCampaignReach WHERE campaign_name = $1",
-                    args
-                );
+                query = `
+                    SELECT 
+                        c.CampaignCode,
+                        c.CampaignName as CampaignName,
+                        m.Date,
+                        m.Reach,
+                        m.UniqueUsers
+                    FROM PACampaignDailyMetrics m
+                    INNER JOIN PCRCampaigns c ON m.IdCampaign = c.IdCampaign
+                    WHERE 1=1
+                    ${args.campaignName ? "AND c.CampaignCode = @campaignName" : ""}
+                    ORDER BY m.Date DESC
+                `;
+                result = await executeQuery(query, args);
                 break;
             }
 
             case "get_campaign_channels": {
-                // Example SQL: SELECT DISTINCT channel FROM campaign_placements WHERE ...
-                result = await executeQuery(
-                    "SELECT * FROM PCREvents WHERE campaign_name = $1",
-                    args
-                );
+                query = `
+                    SELECT 
+                        c.CampaignCode,
+                        c.CampaignName as CampaignName,
+                        ch.ChannelName,
+                        ch.Platform,
+                        ch.Impressions,
+                        ch.Clicks,
+                        CASE WHEN ch.Impressions > 0 
+                            THEN CAST(ch.Clicks AS FLOAT) / ch.Impressions * 100 
+                            ELSE 0 
+                        END as CTR,
+                        ch.Spend as Cost
+                    FROM PACampaignChannelMetrics ch
+                    INNER JOIN PCRCampaigns c ON ch.IdCampaign = c.IdCampaign
+                    WHERE 1=1
+                    ${args.campaignName ? "AND c.CampaignCode = @campaignName" : ""}
+                `;
+                result = await executeQuery(query, args);
                 break;
             }
 
             case "get_campaign_locations": {
-                // Example SQL: SELECT country, city, impressions FROM campaign_geo_stats WHERE ...
-                result = await executeQuery(
-                    "SELECT * FROM PCRAddresses WHERE campaign_name = $1",
-                    args
-                );
+                query = `
+                    SELECT 
+                        c.CampaignCode,
+                        c.CampaignName as CampaignName,
+                        co.CountryName as Country,
+                        ${args.granularity === 'city' ? 'ci.CityName as City,' : ''}
+                        g.Impressions,
+                        g.Clicks,
+                        CASE WHEN g.Impressions > 0 
+                            THEN CAST(g.Clicks AS FLOAT) / g.Impressions * 100 
+                            ELSE 0 
+                        END as CTR
+                    FROM PACampaignGeoMetrics g
+                    INNER JOIN PCRCampaigns c ON g.IdCampaign = c.IdCampaign
+                    LEFT JOIN PCRCountries co ON g.IdCountry = co.IdCountry
+                    LEFT JOIN PCRCities ci ON g.IdCity = ci.IdCity
+                    WHERE 1=1
+                    ${args.campaignName ? "AND c.CampaignCode = @campaignName" : ""}
+                    ORDER BY g.Impressions DESC
+                `;
+                result = await executeQuery(query, args);
                 break;
             }
 
@@ -195,6 +319,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
 
     } catch (error: any) {
+        console.error(`[MCP] Error executing tool ${name}:`, error);
         return {
             content: [
                 {
@@ -208,10 +333,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 async function run() {
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.error("PromptSales Analytics MCP Server running on stdio");
+    try {
+        // Inicializar la base de datos antes de iniciar el servidor
+        await initializeDatabase();
+
+        const transport = new StdioServerTransport();
+        await server.connect(transport);
+        console.error("PromptSales Analytics MCP Server running on stdio");
+    } catch (error) {
+        console.error("Failed to start server:", error);
+        process.exit(1);
+    }
 }
+
+// Manejar cierre graceful
+process.on('SIGINT', async () => {
+    console.error('Shutting down gracefully...');
+    if (pool) {
+        await pool.close();
+    }
+    process.exit(0);
+});
 
 run().catch((error) => {
     console.error("Fatal error running server:", error);

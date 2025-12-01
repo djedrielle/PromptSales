@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: promptsales-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=PromptSales!2025
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  mcp-server:
+    build: ./mcp
+    container_name: promptsales-mcp
+    stdin_open: true
+    tty: false
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=sa
+      - DB_PASS=PromptSales!2025
+      - DB_NAME=PromptAds
+    command: tail -f /dev/null
+
+volumes:
+  mssql_data:
