@@ -22,7 +22,6 @@ services:
       - DB_USER=sa
       - DB_PASS=PromptSales!2025
       - DB_NAME=PromptAds
-    command: tail -f /dev/null
 
 volumes:
   mssql_data:

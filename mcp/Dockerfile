@@ -12,6 +12,10 @@ RUN npm install
 
 # Copy source code
 COPY tsconfig.json index.ts ./
+COPY repo ./repo
+COPY handlers ./handlers
+COPY service ./service
+COPY tools ./tools
 
 # Build the project
 RUN npm run build
