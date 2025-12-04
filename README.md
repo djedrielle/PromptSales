@@ -414,3 +414,50 @@ A continuación, ejemplos de cómo un usuario interactuaría con el agente y qu�
   }
 }
 ```
+
+### Deployment
+
+**Cloud**
+El archivo [promptSales-api.yaml](deploy/k8s/base/promptSales-api.yaml) define el Deployment, Service y HPA usados por el cluster para ejecutar la API en producción.
+
+**CI/CD**
+El workflow se encuentra en [.github/workflows/deploy.yaml](.github/workflows/deploy.yaml), y se ejecuta automáticamente cuando se realiza un push a los branches main o deploy.
+
+El pipeline instalado realiza tareas básicas de validación: instalación de dependencias, análisis estático y ejecución de pruebas. Esto asegura que cada commit pase por una verificación mínima antes de considerarse estable.
+```yaml
+name: PromptSales CI/CD
+
+on:
+  push:
+    branches: [ "main", "deploy" ]
+
+jobs:
+  basic-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Linter
+      run: npm run lint
+
+    - name: Run Unit Tests
+      run: npm test
+
+    - name: Basic Task
+      run: echo "Pipeline ejecutado correctamente" > pipeline_output.txt
+
+```
+**Mantenimiento y Deploy de Migrations**
+
+Para el mantenimiento y deploy de migrations en ambos motores (SQL Server y MongoDB) se va a utilizar [AWS DMS](https://docs.aws.amazon.com/es_es/dms/latest/userguide/Welcome.html).
+
+Este servicio permite mover datos, aplicar cambios incrementales y ejecutar actualizaciones controladas entre ambientes sin afectar la operación.

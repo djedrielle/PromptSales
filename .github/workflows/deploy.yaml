@@ -1,0 +1,29 @@
+name: PromptSales CI/CD
+
+on:
+  push:
+    branches: [ "main", "deploy" ]
+
+jobs:
+  basic-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Linter
+      run: npm run lint
+
+    - name: Run Unit Tests
+      run: npm test
+
+    - name: Basic Task
+      run: echo "Pipeline ejecutado correctamente" > pipeline_output.txt
