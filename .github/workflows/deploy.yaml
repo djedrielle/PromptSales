@@ -5,7 +5,7 @@ on:
     branches: [ "main", "deploy" ]
 
 jobs:
-  basic-ci:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
