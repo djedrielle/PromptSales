@@ -355,13 +355,12 @@ Todo servidor MCP debe seguir una arquitectura en capas para desacoplar la lógi
 
 ### 3. Estándares Técnicos
 
-<<<<<<< HEAD
 *   **TypeScript**: Uso obligatorio para tipado fuerte.
 *   **Docker**: Cada servidor debe tener su propio `Dockerfile` optimizado (copiar solo lo necesario).
 *   **Manejo de Errores**: Los handlers deben capturar excepciones y retornar respuestas de error formateadas, no dejar caer el servidor.
 *   **Conexión a BD**: Implementar reintentos (backoff) al iniciar la conexión para tolerar tiempos de espera de la base de datos en el arranque.
-=======
-## 5. Prompts de Ejemplo
+
+## 4. Prompts de Ejemplo
 
 A continuación, ejemplos de cómo un usuario interactuaría con el agente y qué herramienta se activaría internamente:
 
@@ -462,4 +461,3 @@ jobs:
 Para el mantenimiento y deploy de migrations en ambos motores (SQL Server y MongoDB) se va a utilizar [AWS DMS](https://docs.aws.amazon.com/es_es/dms/latest/userguide/Welcome.html).
 
 Este servicio permite mover datos, aplicar cambios incrementales y ejecutar actualizaciones controladas entre ambientes sin afectar la operación.
->>>>>>> a355d73a7214337986d7fe7a1573b659548988f6
