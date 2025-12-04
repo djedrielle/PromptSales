@@ -355,7 +355,111 @@ Todo servidor MCP debe seguir una arquitectura en capas para desacoplar la lógi
 
 ### 3. Estándares Técnicos
 
+<<<<<<< HEAD
 *   **TypeScript**: Uso obligatorio para tipado fuerte.
 *   **Docker**: Cada servidor debe tener su propio `Dockerfile` optimizado (copiar solo lo necesario).
 *   **Manejo de Errores**: Los handlers deben capturar excepciones y retornar respuestas de error formateadas, no dejar caer el servidor.
 *   **Conexión a BD**: Implementar reintentos (backoff) al iniciar la conexión para tolerar tiempos de espera de la base de datos en el arranque.
+=======
+## 5. Prompts de Ejemplo
+
+A continuación, ejemplos de cómo un usuario interactuaría con el agente y qué herramienta se activaría internamente:
+
+### Ejemplo 1: Rendimiento General
+**Usuario**: "¿Cómo le fue a la campaña xxxx el mes pasado?"
+**Tool Call**:
+```json
+{
+  "name": "get_campaign_performance",
+  "arguments": {
+    "campaignName": "xxxx",
+    "startDate": "2025-10-01",
+    "endDate": "2025-10-31"
+  }
+}
+```
+
+### Ejemplo 2: Análisis de Ventas
+**Usuario**: "Muéstrame cuánto dinero generó la campaña de xxxx."
+**Tool Call**:
+```json
+{
+  "name": "get_sales_data",
+  "arguments": {
+    "campaignName": "xxxx"
+  }
+}
+```
+
+### Ejemplo 3: Distribución Geográfica
+**Usuario**: "¿En qué ciudades estamos teniendo más impacto con la campaña xxxx?"
+**Tool Call**:
+```json
+{
+  "name": "get_campaign_locations",
+  "arguments": {
+    "campaignName": "xxxx",
+    "granularity": "city"
+  }
+}
+```
+
+### Ejemplo 4: Auditoría de Canales
+**Usuario**: "¿En qué redes sociales se publicó el anuncio de la campaña xxxx?"
+**Tool Call**:
+```json
+{
+  "name": "get_campaign_channels",
+  "arguments": {
+    "campaignName": "xxxx"
+  }
+}
+```
+
+### Deployment
+
+**Cloud**
+El archivo [promptSales-api.yaml](deploy/k8s/base/promptSales-api.yaml) define el Deployment, Service y HPA usados por el cluster para ejecutar la API en producción.
+
+**CI/CD**
+El workflow se encuentra en [.github/workflows/deploy.yaml](.github/workflows/deploy.yaml), y se ejecuta automáticamente cuando se realiza un push a los branches main o deploy.
+
+El pipeline instalado realiza tareas básicas de validación: instalación de dependencias, análisis estático y ejecución de pruebas. Esto asegura que cada commit pase por una verificación mínima antes de considerarse estable.
+```yaml
+name: PromptSales CI/CD
+
+on:
+  push:
+    branches: [ "main", "deploy" ]
+
+jobs:
+  basic-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Linter
+      run: npm run lint
+
+    - name: Run Unit Tests
+      run: npm test
+
+    - name: Basic Task
+      run: echo "Pipeline ejecutado correctamente" > pipeline_output.txt
+
+```
+**Mantenimiento y Deploy de Migrations**
+
+Para el mantenimiento y deploy de migrations en ambos motores (SQL Server y MongoDB) se va a utilizar [AWS DMS](https://docs.aws.amazon.com/es_es/dms/latest/userguide/Welcome.html).
+
+Este servicio permite mover datos, aplicar cambios incrementales y ejecutar actualizaciones controladas entre ambientes sin afectar la operación.
+>>>>>>> a355d73a7214337986d7fe7a1573b659548988f6

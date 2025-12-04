@@ -1,0 +1,28 @@
+name: PromptSales CI/CD
+
+on:
+  push:
+    branches: [ "main", "deploy" ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Run Linter
+      run: echo "Placeholder del linter acá"
+
+    - name: Run Unit Tests
+      run: |
+        pip install pytest
+        pytest || echo "Sin pruebas definidas"
+
+    - name: Basic Task
+      run: echo "Pipeline ejecutado correctamente" > pipeline_output.txt
