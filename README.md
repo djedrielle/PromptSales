@@ -323,94 +323,39 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0aEdSdVhrdFkvZXAxR0REMExaODVLMlk4eHBJc0FzZWZFU3o3cUJGU0ppbGprdmNaeGNWSlE0U09TUnRlN0V4Wml6cmJzRnRnMUkyVmw2OHo2Vlc5SncrYldYd2p3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=516617271561
 
 
-## PromptSales MCP Servers
+## Guía de Desarrollo de MCP Servers
 
-## 1. Ubicación de Configuración
+Esta sección detalla los estándares y patrones arquitectónicos para la creación de nuevos servidores MCP en PromptSales.
 
-*   **Directorio Raíz**: `mcp/`
-*   **Punto de Entrada**: [`index.ts`](./index.ts) - Contiene toda la lógica del servidor, definición de herramientas y manejo de peticiones.
-*   **Gestión de Paquetes**: [`package.json`](./package.json) - Define las dependencias, específicamente el SDK de MCP (`@modelcontextprotocol/sdk`).
-*   **Configuración de Ejecución**: El MCP server está diseñado para ejecutarse sobre `stdio`.
+### 1. Arquitectura en Capas
+Todo servidor MCP debe seguir una arquitectura en capas para desacoplar la lógica de negocio de la definición de herramientas y el acceso a datos.
 
-## 2. Reglas y Principios de Diseño
+*   **`tools/`**: Definiciones de esquemas JSON para las herramientas (contratos).
+*   **`handlers/`**: Controladores que mapean las peticiones MCP a la lógica de negocio.
+*   **`service/`**: Lógica de negocio pura. Orquesta llamadas a repositorios o APIs externas.
+*   **`repo/`**: Acceso a datos (SQL, APIs externas). Maneja conexiones y reintentos.
+*   **`index.ts`**: Punto de entrada. Configura el servidor y registra los handlers.
 
-*   **Transporte Stdio**: El MCP server lee JSON-RPC de `stdin` y escribe en `stdout`. Los logs de depuración deben ir siempre a `stderr` para no romper el protocolo.
-*   **Statelessness (Sin Estado)**: El MCP server procesa cada petición de forma independiente. No mantiene estado de sesión entre llamadas a herramientas.
-*   **Preparado para Producción**: Aunque actualmente usa un placeholder para la base de datos (`executeQuery`), la estructura de las herramientas y las consultas SQL simuladas están diseñadas para conectarse directamente a una base de datos relacional (como PostgreSQL) sin cambiar la interfaz de las herramientas.
-*   **Tipado Fuerte**: Se utiliza TypeScript para definir los esquemas de entrada y garantizar la seguridad de tipos en los argumentos.
+### 2. Pasos para Crear un Nuevo MCP Server
 
-## 3. Código de Implementación  
+1.  **Definir Herramientas (`tools/definitions.ts`)**:
+    Crear los esquemas de entrada usando TypeScript. Definir claramente `name`, `description` y `inputSchema`.
 
-La implementación en `index.ts` sigue este flujo:
+2.  **Implementar Capa de Datos (`repo/`)**:
+    Crear funciones para acceder a la base de datos o servicios externos. Implementar lógica de reintento para conexiones (ver `initializeDatabase` en `repo/db.ts`).
 
-1.  **Inicialización**: Se importa la clase `Server` y se instancia con el nombre `promptsales-analytics`.
-2.  **Definición de Herramientas (`ListToolsRequestSchema`)**: Se expone un JSON Schema para cada herramienta, detallando qué argumentos acepta (ej. `campaignName`, `startDate`). Esto permite al LLM entender *cómo* usar la herramienta.
-3.  **Ejecución de Herramientas (`CallToolRequestSchema`)**: Un `switch` maneja las llamadas. Cada caso construye una consulta SQL (actualmente simulada) y retorna los resultados en formato JSON.
-4.  **Manejo de Errores**: Se envuelven las ejecuciones en bloques `try-catch` para devolver errores formateados al cliente MCP en lugar de crashear el servidor.
+3.  **Implementar Lógica de Negocio (`service/`)**:
+    Crear funciones que utilicen el repositorio para obtener datos y procesarlos según sea necesario.
 
-## 4. Tools Disponibles
+4.  **Crear Handlers (`handlers/`)**:
+    Implementar funciones `handleListTools` y `handleCallTool`. Usar un `switch` para despachar llamadas a los servicios correspondientes.
 
-El servidor expone 5 herramientas especializadas:
+5.  **Registrar en el Servidor (`index.ts`)**:
+    Inicializar el servidor MCP, conectar la base de datos y registrar los handlers para `ListToolsRequestSchema` y `CallToolRequestSchema`.
 
-| Tool | Descripción | Argumentos Clave |
-| :--- | :--- | :--- |
-| **`get_campaign_performance`** | Métricas generales de rendimiento (impresiones, clicks, CTR, gasto). | `campaignName`, `startDate`, `endDate` |
-| **`get_sales_data`** | Datos financieros, ventas totales y conversiones atribuidas. | `campaignName`, `startDate`, `endDate` |
-| **`get_campaign_reach`** | Métricas de alcance de audiencia y usuarios únicos. | `campaignName` |
-| **`get_campaign_channels`** | Lista de canales (redes sociales, email, web) donde se publicó. | `campaignName` |
-| **`get_campaign_locations`** | Desglose geográfico (países, ciudades) del impacto de la campaña. | `campaignName`, `granularity` |
+### 3. Estándares Técnicos
 
-## 5. Prompts de Ejemplo
-
-A continuación, ejemplos de cómo un usuario interactuaría con el agente y qué herramienta se activaría internamente:
-
-### Ejemplo 1: Rendimiento General
-**Usuario**: "¿Cómo le fue a la campaña xxxx el mes pasado?"
-**Tool Call**:
-```json
-{
-  "name": "get_campaign_performance",
-  "arguments": {
-    "campaignName": "xxxx",
-    "startDate": "2025-10-01",
-    "endDate": "2025-10-31"
-  }
-}
-```
-
-### Ejemplo 2: Análisis de Ventas
-**Usuario**: "Muéstrame cuánto dinero generó la campaña de xxxx."
-**Tool Call**:
-```json
-{
-  "name": "get_sales_data",
-  "arguments": {
-    "campaignName": "xxxx"
-  }
-}
-```
-
-### Ejemplo 3: Distribución Geográfica
-**Usuario**: "¿En qué ciudades estamos teniendo más impacto con la campaña xxxx?"
-**Tool Call**:
-```json
-{
-  "name": "get_campaign_locations",
-  "arguments": {
-    "campaignName": "xxxx",
-    "granularity": "city"
-  }
-}
-```
-
-### Ejemplo 4: Auditoría de Canales
-**Usuario**: "¿En qué redes sociales se publicó el anuncio de la campaña xxxx?"
-**Tool Call**:
-```json
-{
-  "name": "get_campaign_channels",
-  "arguments": {
-    "campaignName": "xxxx"
-  }
-}
-```
+*   **TypeScript**: Uso obligatorio para tipado fuerte.
+*   **Docker**: Cada servidor debe tener su propio `Dockerfile` optimizado (copiar solo lo necesario).
+*   **Manejo de Errores**: Los handlers deben capturar excepciones y retornar respuestas de error formateadas, no dejar caer el servidor.
+*   **Conexión a BD**: Implementar reintentos (backoff) al iniciar la conexión para tolerar tiempos de espera de la base de datos en el arranque.
