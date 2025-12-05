@@ -360,7 +360,7 @@ Todo servidor MCP debe seguir una arquitectura en capas para desacoplar la lógi
 *   **Manejo de Errores**: Los handlers deben capturar excepciones y retornar respuestas de error formateadas, no dejar caer el servidor.
 *   **Conexión a BD**: Implementar reintentos (backoff) al iniciar la conexión para tolerar tiempos de espera de la base de datos en el arranque.
 
-## 4. Prompts de Ejemplo
+## Prompts de Ejemplo
 
 A continuación, ejemplos de cómo un usuario interactuaría con el agente y qué herramienta se activaría internamente:
 
