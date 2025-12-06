@@ -77,3 +77,59 @@ class SubscriptionSpRepository:
                 )
             )
         return results
+    
+
+
+""" 
+cd promptcrm_backend
+
+.\.venv\Scripts\activate
+
+python manage.py shell
+
+
+
+ 
+from datetime import date, timedelta
+from crm.repositories.subscription_sp_repository import SubscriptionSpRepository
+
+repo = SubscriptionSpRepository()
+
+# usa IdUser e IdTier que EXISTAN en la base
+new_id = repo.create_subscription(
+    id_user=4, 
+    id_tier=1,
+    start_date=date.today(),
+    end_date=date.today() + timedelta(days=30),
+)
+
+print("Id nueva subscripción:", new_id)  
+
+
+
+
+
+
+
+
+
+      
+from crm.repositories.subscription_sp_repository import SubscriptionSpRepository
+
+repo = SubscriptionSpRepository()
+
+# usa un IdUser válido
+user_id = 4 
+
+subs = repo.get_active_by_user(user_id)
+
+for s in subs:
+    print("IdSub:", s.id_subscription,
+          "Tier:", s.tier_name,
+          "Precio:", s.pricing,
+          "Inicio:", s.start_date,
+          "Fin:", s.end_date,
+          "Enabled:", s.enabled)
+     
+
+""" 
