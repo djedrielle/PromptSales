@@ -8,7 +8,7 @@
 
 ### Performance
 
-El equipo de desarrollo decidió utilizar las siguientes tecnologías Python + Django + Postgres.
+El equipo de desarrollo decidió utilizar las siguientes tecnologías Python + Django + SQL Server.
 
 1 request de pedir todos los registros a una base de datos SQLite desde una API con Django dura 75ms según los benchmarks realizados por Bednarz y Miłosz en [Benchmarking the performance of Python web frameworks](/Benchmarking_the_performance_of_Python_web_framewo.pdf).
 
@@ -88,7 +88,7 @@ Se usa el servicio [EKS](https://docs.aws.amazon.com/es_es/eks/latest/userguide/
 
 **Bases de datos**
 
-Para las bases de datos PostgreSQL y SQL Server se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+Para las bases de datos SQL Server se utilizará [Amazon Aurora](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
 - Aurora Multi-AZ (writer + reader)
 - RPO objetivo: ≈ 0 s
 - RTO objetivo (failover): ≤ 60 s (conmutación automática a réplica).
@@ -120,7 +120,7 @@ Se aplicará una autenticación basada en OpenID Connect. Esta será proporciona
 
 Para cifrar los datos en la comunicación de REST se utilizará TLS. 
 
-En las bases de datos Mongo, Postgres y MySQL utilizaremos el cifrado AES-256.
+En las bases de datos Mongo y SQL Server utilizaremos el cifrado AES-256.
 
 ### Maintainability
 
@@ -257,8 +257,7 @@ Este dominio se encarga de validar qué funcionalidades de la plataforma el usua
 ### Tecnologías
 - Python: Lenguaje base del backend para todos los dominios.
 - Django + DRF: Framework usado para exponer las REST APIs de cada dominio siguiendo DDD (viewsets, facades y clients).
-- Aurora PostgreSQL / SQL Server
-    - PostgreSQL: datos de PromptAds.
+- Aurora SQL Server
     - SQL Server: PromptCrm y datos de Global Domains (suscripciones, planes, billing).
 - MongoDB Atlas: Base del dominio PromptContent para briefs, configuraciones y metadatos creativos.
 - Redis (ElastiCache): Cache compartido para respuestas rápidas, tokens temporales y soporte a rate limiting / eventos.
@@ -360,7 +359,7 @@ Todo servidor MCP debe seguir una arquitectura en capas para desacoplar la lógi
 *   **Manejo de Errores**: Los handlers deben capturar excepciones y retornar respuestas de error formateadas, no dejar caer el servidor.
 *   **Conexión a BD**: Implementar reintentos (backoff) al iniciar la conexión para tolerar tiempos de espera de la base de datos en el arranque.
 
-## 4. Prompts de Ejemplo
+## Prompts de Ejemplo
 
 A continuación, ejemplos de cómo un usuario interactuaría con el agente y qué herramienta se activaría internamente:
 
