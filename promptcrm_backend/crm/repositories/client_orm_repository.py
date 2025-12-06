@@ -3,6 +3,7 @@ from typing import List
 from datetime import datetime
 
 from django.utils import timezone
+from django.core.cache import cache
 
 from crm.models import PCRClient, PCRClientStatus
 
@@ -17,16 +18,25 @@ class ClientDTO:
     updated_at: datetime
 
 
+    """
+    Repository usando Django ORM sobre PCRClients.
+    Prepara uso de cache a nivel de lectura.
+    """
+
+
 class ClientOrmRepository:
-    """
-    Repository layer usando Django ORM.
-    Usa PCRClients y PCRClientStatuses.
-    Nada de SPs aquí.
-    """
+
+
+    CACHE_TTL_SECONDS = 60
+
+    def _cache_key_clients_by_status(self, id_status: int) -> str:
+        return f"clients:status:{id_status}"
+
 
     def create_client(self, client_code: str, id_status: int) -> int:
         """
-        Escritura: crea un cliente y devuelve el IdClient.
+        Escritura con ORM.
+        Invalida cache de ese status.
         """
         now = timezone.now()
 
@@ -37,12 +47,23 @@ class ClientOrmRepository:
             updated_at=now,
         )
 
+        cache.delete(self._cache_key_clients_by_status(id_status))
+
         return client.id_client
 
-    def get_clients_by_status(self, id_status: int) -> List[ClientDTO]:
+    def get_clients_by_status(self, id_status: int, use_cache: bool = True) -> List[ClientDTO]:
         """
-        Lectura: obtiene clientes por estado, usando JOIN vía select_related.
+        Lectura con ORM.
+        Usa cache opcionalmente.
         """
+
+        cache_key = self._cache_key_clients_by_status(id_status)
+
+        if use_cache:
+            cached = cache.get(cache_key)
+            if cached is not None:
+                return cached
+            
         qs = (
             PCRClient.objects
             .filter(status_id=id_status)
@@ -64,6 +85,9 @@ class ClientOrmRepository:
                 )
             )
 
+        if use_cache:
+            cache.set(cache_key, results, timeout=self.CACHE_TTL_SECONDS)
+            
         return results
 
 

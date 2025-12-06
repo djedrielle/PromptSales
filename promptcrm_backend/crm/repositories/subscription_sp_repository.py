@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List, Optional
 from django.db import connection
+from django.core.cache import cache
+from datetime import timedelta
 
 
 @dataclass
@@ -17,7 +19,22 @@ class SubscriptionDTO:
     updated_at: str
 
 
+
+    """
+    Repository con SPs.
+    Aquí dejamos previstas de cache y usamos django.db.connection
+    que ya usa connection pooling en DATABASES[default].CONN_MAX_AGE.
+
+    """
+
+
 class SubscriptionSpRepository:
+
+    CACHE_TTL_SECONDS = 60
+
+    def _cache_key_active_by_user(self, id_user: int) -> str:
+        return f"subscriptions:active:user:{id_user}"
+    
     def create_subscription(
         self,
         id_user: int,
@@ -26,6 +43,12 @@ class SubscriptionSpRepository:
         end_date,
         enabled: bool = True,
     ) -> int:
+        
+        """
+        Llama a dbo.SP_PCR_CreateSubscription y devuelve el IdSubscription generado.
+        Invalida la cache de suscripciones activas del usuario.
+        """
+
         with connection.cursor() as cursor:
             cursor.execute(
                 """
@@ -45,12 +68,27 @@ class SubscriptionSpRepository:
             )
             row = cursor.fetchone()
             return int(row[0])
+        
+        cache.delete(self._cache_key_active_by_user(id_user))
+
+        return new_id
 
 
-    def get_active_by_user(self, id_user: int) -> List[SubscriptionDTO]:
         """
-        Llama a dbo.PCR_GetActiveSubscriptionsByUser y devuelve una lista de DTO.
+        Llama a dbo.SP_PCR_GetActiveSubscriptionsByUser y devuelve una lista de DTO.
+        Usa cache si use_cache es True.
         """
+
+
+    def get_active_by_user(self, id_user: int, use_cache: bool = True) -> List[SubscriptionDTO]:
+
+        cache_key = self._cache_key_active_by_user(id_user)
+
+        if use_cache:
+            cached = cache.get(cache_key)
+            if cached is not None:
+                return cached
+
         with connection.cursor() as cursor:
             cursor.execute(
                 "EXEC dbo.SP_PCR_GetActiveSubscriptionsByUser @IdUser = %s;",
@@ -76,6 +114,10 @@ class SubscriptionSpRepository:
                     updated_at=data["UpdatedAt"],
                 )
             )
+
+        if use_cache:
+            cache.set(cache_key, results, timeout=self.CACHE_TTL_SECONDS)
+
         return results
     
 
@@ -98,7 +140,7 @@ repo = SubscriptionSpRepository()
 # usa IdUser e IdTier que EXISTAN en la base
 new_id = repo.create_subscription(
     id_user=4, 
-    id_tier=1,
+    id_tier=2,
     start_date=date.today(),
     end_date=date.today() + timedelta(days=30),
 )
