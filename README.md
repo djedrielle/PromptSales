@@ -333,7 +333,7 @@ Se definieron los siguientes motores de base de datos:
 ### Base de datos de PromptCrm 
 ![PromptCRM Database Diagram](/diagrams/PromptCrmDB.png)
 
-Script de creacion: [PromptCRM schema](/DBCreationScripts/PromptCRM_CreationScript.sql)
+Script de creacion: [PromptCRM](/DBCreationScripts/PromptCRM_CreationScript.sql)
 
 
 ### Base de datos de PromptContent 
