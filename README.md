@@ -343,7 +343,7 @@ Script de creacion: [PromptContent](/DBCreationScripts/creacion-colecciones-prom
 
 Ejemplos de documentos JSON:
 
--Campañas
+- Campañas
 ``` json
 {
   "campaignId": "CMP-VERANO-2025",
@@ -365,7 +365,7 @@ Ejemplos de documentos JSON:
 
 ``` 
 
--Clientes
+- Clientes
 ``` json
 {
   "clientId": "CLI-001",
