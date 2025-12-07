@@ -331,7 +331,7 @@ Se definieron los siguientes motores de base de datos:
 - **PromptContent:** MongoDB
 
 ### Base de datos de PromptCrm 
-
+![PromptCRM Database Diagram](/diagrams/PromptCrmDB.png)
 
 
 ## Guía de Desarrollo de MCP Servers
