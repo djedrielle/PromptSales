@@ -1,0 +1,18 @@
+# Django y extensiones
+django>=5.0
+djangorestframework>=3.14
+
+# Base de datos SQL Server
+mssql-django>=1.4
+pyodbc>=5.0
+
+# Testing
+pytest>=8.0
+pytest-django>=4.5
+requests>=2.31
+
+# Stress Testing
+locust>=2.15
+
+# Linting y calidad de código
+ruff>=0.1

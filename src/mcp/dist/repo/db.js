@@ -23,13 +23,20 @@ let pool = null;
  * Inicializa el pool de conexiones
  */
 export async function initializeDatabase() {
-    try {
-        pool = await sql.connect(dbConfig);
-        console.error('✓ Connected to SQL Server successfully');
-    }
-    catch (error) {
-        console.error('✗ Database connection failed:', error.message);
-        throw error;
+    const maxRetries = 10;
+    const retryDelay = 5000;
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            pool = await sql.connect(dbConfig);
+            console.error('✓ Connected to SQL Server successfully');
+            return;
+        }
+        catch (error) {
+            console.error(`✗ Database connection failed (attempt ${i + 1}/${maxRetries}):`, error.message);
+            if (i === maxRetries - 1)
+                throw error;
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+        }
     }
 }
 /**

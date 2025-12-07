@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import List, Optional
 from django.db import connection
 from django.core.cache import cache
-from datetime import timedelta
 
 
 @dataclass

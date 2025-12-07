@@ -21,6 +21,7 @@ const server = new Server(
     }
 );
 
+// Configurar handlers usando el patrón moderno
 server.setRequestHandler(ListToolsRequestSchema, handleListTools);
 server.setRequestHandler(CallToolRequestSchema, handleCallTool);
 

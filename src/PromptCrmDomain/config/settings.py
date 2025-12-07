@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    # 'rest_framework',  # No necesario para nuestras vistas simples con JsonResponse
     'crm',
 ]
 
@@ -74,21 +74,31 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# SQLite para desarrollo (no requiere instalación ni configuración)
 DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": "PromptCrm",
-        "USER": "promptcrm_user",            
-        "PASSWORD": "123456",
-        "CONN_MAX_AGE": 60,     
-        "HOST": r"localhost\SQLEXPRESS",     
-        "PORT": "",                          
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",  
-            "extra_params": "TrustServerCertificate=yes",
-        },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Configuración original de SQL Server (comentada para referencia)
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "mssql",
+#         "NAME": "PromptCrm",
+#         "USER": "promptcrm_user",            
+#         "PASSWORD": "123456",
+#         "CONN_MAX_AGE": 60,     
+#         "HOST": r"localhost\SQLEXPRESS",     
+#         "PORT": "",                          
+#         "OPTIONS": {
+#             "driver": "ODBC Driver 17 for SQL Server",  
+#             "extra_params": "TrustServerCertificate=yes",
+#         },
+#     }
+# }
+
 
 
 # Password validation

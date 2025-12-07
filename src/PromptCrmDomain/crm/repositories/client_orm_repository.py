@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.core.cache import cache
 
-from crm.models import PCRClient, PCRClientStatus
+from crm.models import PCRClient
 
 
 @dataclass
