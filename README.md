@@ -339,7 +339,7 @@ Script de creacion: [PromptCRM schema](/DBCreationScripts/PromptCRM_CreationScri
 ### Base de datos de PromptContent 
 ![PromptCRM Database Diagram](/diagrams/promptcontentDB.png)
 
-Script de creacion: [PromptCRM schema](/DBCreationScripts/creacion-colecciones-promptcontent.py)
+Script de creacion: [PromptContent](/DBCreationScripts/creacion-colecciones-promptcontent.py)
 
 ## Guía de Desarrollo de MCP Servers
 
