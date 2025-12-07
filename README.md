@@ -322,6 +322,94 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0aEdSdVhrdFkvZXAxR0REMExaODVLMlk4eHBJc0FzZWZFU3o3cUJGU0ppbGprdmNaeGNWSlE0U09TUnRlN0V4Wml6cmJzRnRnMUkyVmw2OHo2Vlc5SncrYldYd2p3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=516617271561
 
 
+## Diseño de base de datos
+Se definieron los siguientes motores de base de datos:
+
+- **PromptSales:** SQL Server
+- **PromptCrm:** SQL Server
+- **PromptAds:** SQL Server
+- **PromptContent:** MongoDB
+
+### Base de datos de PromptCrm 
+![PromptCRM Database Diagram](/diagrams/PromptCrmDB.png)
+
+Script de creacion: [PromptCRM](/DBCreationScripts/PromptCRM_CreationScript.sql)
+
+
+### Base de datos de PromptContent 
+![PromptCRM Database Diagram](/diagrams/promptcontentDB.png)
+
+Script de creacion: [PromptContent](/DBCreationScripts/creacion-colecciones-promptcontent.py)
+
+Ejemplos de documentos JSON:
+
+- Campañas
+``` json
+{
+  "campaignId": "CMP-VERANO-2025",
+  "name": "Campaña Verano 2025",
+  "description": "Promoción de productos refrescantes para temporada de verano.",
+  "targetAudience": "Jóvenes entre 18 y 30 años en Costa Rica.",
+  "campaignMessage": "Refrescate este verano con nuestra nueva línea.",
+  "contentVersions": [
+    { "contentId": "CNT-001", "platform": "Instagram", "type": "imagen" },
+    { "contentId": "CNT-002", "platform": "Facebook", "type": "video" }
+  ],
+  "usedImages": ["MED-IMG-101", "MED-IMG-102"],
+  "status": "active",
+  "startDate": "2025-01-05T00:00:00Z",
+  "endDate": "2025-03-01T00:00:00Z",
+  "createdAt": "2025-01-02T10:15:00Z",
+  "updatedAt": "2025-01-10T14:30:00Z"
+}
+
+``` 
+
+- Clientes
+``` json
+{
+  "clientId": "CLI-001",
+  "email": "contacto@tiendaeco.cr",
+  "name": "Tienda Eco",
+  "company": "Tienda Eco S.A.",
+  "phone": "+506 7010-2020",
+  "createdAt": "2024-12-15T12:30:00Z",
+  "updatedAt": "2025-01-05T09:20:00Z",
+  "status": "active",
+  "subscriptions": [
+    {
+      "subscriptionId": "SUB-1001",
+      "planId": "PLAN-EMPRENDE",
+      "planName": "Plan Emprendedor",
+      "status": "active",
+      "startDate": "2025-01-01T00:00:00Z",
+      "endDate": null,
+      "renewalDate": "2025-02-01T00:00:00Z",
+      "paymentStatus": "paid",
+      "usageTracking": {
+        "generacion_contenido": { "used": 35, "limit": 100, "resetDate": "2025-02-01T00:00:00Z" },
+        "imagenes_ia": { "used": 10, "limit": 40, "resetDate": "2025-02-01T00:00:00Z" }
+      }
+    }
+  ]
+}
+
+``` 
+
+### Diseño de Data Pipeline
+PromptSales usara un proceso ETL cada 15 minutos para mantener la informacion actualizada de las tres bases de datos, este data pipeline extrae datos de las bases de 
+cada subempresa y la transfiere a PromptSales.
+
+El servicio principal utilizado para orquestar la conexión y el movimiento de datos es AWS Glue. Proporciona jobs de ETL en Python o Spark que permiten extraer, transformar y cargar información desde las distintas fuentes hacia las tablas destino.
+
+#### Criterios de Delta
+
+Para extraer únicamente los registros nuevos o modificados, AWS Glue compara las columnas createdAt y updatedAt contra la marca de tiempo registrada en la última ejecución del ETL. Si alguno de estos valores es más reciente, el registro se incluye en la carga hacia PromptSales.
+
+En el diagrama se muestra este proceso:
+
+![ETLPipeline Image](/diagrams/ETLDataPipeline.png)
+
 ## Guía de Desarrollo de MCP Servers
 
 Esta sección detalla los estándares y patrones arquitectónicos para la creación de nuevos servidores MCP en PromptSales.
