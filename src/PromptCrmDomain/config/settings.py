@@ -83,21 +83,21 @@ DATABASES = {
 }
 
 # Configuración original de SQL Server (comentada para referencia)
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "mssql",
-#         "NAME": "PromptCrm",
-#         "USER": "promptcrm_user",            
-#         "PASSWORD": "123456",
-#         "CONN_MAX_AGE": 60,     
-#         "HOST": r"localhost\SQLEXPRESS",     
-#         "PORT": "",                          
-#         "OPTIONS": {
-#             "driver": "ODBC Driver 17 for SQL Server",  
-#             "extra_params": "TrustServerCertificate=yes",
-#         },
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "mssql",
+        "NAME": "PromptCrm",
+        "USER": "promptcrm_user",            
+        "PASSWORD": "123456",
+        "CONN_MAX_AGE": 60,     
+        "HOST": r"localhost\SQLEXPRESS",     
+        "PORT": "",                          
+        "OPTIONS": {
+            "driver": "ODBC Driver 17 for SQL Server",  
+            "extra_params": "TrustServerCertificate=yes",
+        },
+    }
+}
 
 
 

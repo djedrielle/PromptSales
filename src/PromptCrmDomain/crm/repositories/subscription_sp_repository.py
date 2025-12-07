@@ -18,22 +18,18 @@ class SubscriptionDTO:
     updated_at: str
 
 
-
+class SubscriptionSpRepository:
     """
     Repository con SPs.
-    Aquí dejamos previstas de cache y usamos django.db.connection
+    Aquí dejamos previstas de cache y usamos django.db.connection,
     que ya usa connection pooling en DATABASES[default].CONN_MAX_AGE.
-
     """
-
-
-class SubscriptionSpRepository:
 
     CACHE_TTL_SECONDS = 60
 
     def _cache_key_active_by_user(self, id_user: int) -> str:
         return f"subscriptions:active:user:{id_user}"
-    
+
     def create_subscription(
         self,
         id_user: int,
@@ -42,18 +38,16 @@ class SubscriptionSpRepository:
         end_date,
         enabled: bool = True,
     ) -> int:
-        
         """
         Llama a dbo.SP_PCR_CreateSubscription y devuelve el IdSubscription generado.
         Invalida la cache de suscripciones activas del usuario.
         """
-
         with connection.cursor() as cursor:
             cursor.execute(
                 """
                 DECLARE @NewIdSub INT;
 
-                EXEC SP_PCR_CreateSubscription
+                EXEC dbo.SP_PCR_CreateSubscription
                     @IdUser    = %s,
                     @IdTier    = %s,
                     @StartDate = %s,
@@ -66,21 +60,18 @@ class SubscriptionSpRepository:
                 [id_user, id_tier, start_date, end_date, int(enabled)],
             )
             row = cursor.fetchone()
-            return int(row[0])
-        
+            new_id = int(row[0])
+
+        # invalidar cache fuera del with
         cache.delete(self._cache_key_active_by_user(id_user))
 
         return new_id
 
-
+    def get_active_by_user(self, id_user: int, use_cache: bool = True) -> List[SubscriptionDTO]:
         """
         Llama a dbo.SP_PCR_GetActiveSubscriptionsByUser y devuelve una lista de DTO.
         Usa cache si use_cache es True.
         """
-
-
-    def get_active_by_user(self, id_user: int, use_cache: bool = True) -> List[SubscriptionDTO]:
-
         cache_key = self._cache_key_active_by_user(id_user)
 
         if use_cache:
@@ -118,8 +109,6 @@ class SubscriptionSpRepository:
             cache.set(cache_key, results, timeout=self.CACHE_TTL_SECONDS)
 
         return results
-    
-
 
 """ 
 cd promptcrm_backend
