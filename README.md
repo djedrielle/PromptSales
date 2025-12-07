@@ -397,7 +397,18 @@ Ejemplos de documentos JSON:
 ``` 
 
 ### Diseño de Data Pipeline
+PromptSales usara un proceso ETL cada 15 minutos para mantener la informacion actualizada de las tres bases de datos, este data pipeline extrae datos de las bases de 
+cada subempresa y la transfiere a PromptSales.
 
+El servicio principal utilizado para orquestar la conexión y el movimiento de datos es AWS Glue. Proporciona jobs de ETL en Python o Spark que permiten extraer, transformar y cargar información desde las distintas fuentes hacia las tablas destino.
+
+#### Criterios de Delta
+
+Para extraer únicamente los registros nuevos o modificados, AWS Glue compara las columnas createdAt y updatedAt contra la marca de tiempo registrada en la última ejecución del ETL. Si alguno de estos valores es más reciente, el registro se incluye en la carga hacia PromptSales.
+
+En el diagrama se muestra este proceso:
+
+![ETLPipeline Image](/diagrams/ETLDataPipeline.png)
 
 ## Guía de Desarrollo de MCP Servers
 
