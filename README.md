@@ -333,6 +333,9 @@ Se definieron los siguientes motores de base de datos:
 ### Base de datos de PromptCrm 
 ![PromptCRM Database Diagram](/diagrams/PromptCrmDB.png)
 
+### Base de datos de PromptContent 
+![PromptCRM Database Diagram](/diagrams/promptcontentDB.png)
+
 
 ## Guía de Desarrollo de MCP Servers
 
