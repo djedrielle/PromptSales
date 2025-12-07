@@ -322,6 +322,18 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0aEdSdVhrdFkvZXAxR0REMExaODVLMlk4eHBJc0FzZWZFU3o3cUJGU0ppbGprdmNaeGNWSlE0U09TUnRlN0V4Wml6cmJzRnRnMUkyVmw2OHo2Vlc5SncrYldYd2p3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=516617271561
 
 
+## Diseño de base de datos
+Se definieron los siguientes motores de base de datos:
+
+- **PromptSales:** SQL Server
+- **PromptCrm:** SQL Server
+- **PromptAds:** SQL Server
+- **PromptContent:** MongoDB
+
+### Base de datos de PromptCrm 
+
+
+
 ## Guía de Desarrollo de MCP Servers
 
 Esta sección detalla los estándares y patrones arquitectónicos para la creación de nuevos servidores MCP en PromptSales.
