@@ -547,11 +547,10 @@ Este servicio permite mover datos, aplicar cambios incrementales y ejecutar actu
 
 ---
 
-## 🧪 Testing & QA Suite
+## Testability
 
-Esta sección documenta la batería de pruebas del proyecto PromptSales.
-
-### 📂 Estructura de Tests
+Esta sección del documento esta dirigida a guiar el como realizamos las pruebas de nuestros distintos dominios asi como documentar resultados de pruebas pasadas. 
+### Estructura de Tests
 
 ```
 tests/
@@ -561,9 +560,10 @@ tests/
 └── mcp/        # Pruebas del servidor MCP (JSON-RPC)
 ```
 
-### 🚀 Inicio Rápido
+### Requisitos y Ejecución Rápido
+Este apartado documenta los comandos necesarios para descargar lso requisitos necesarios para correr las pruebas, asi como un comando de sirve para correr de manera rapida y sencilla todos las pruebas de manera simultanea. 
 
-**Requisitos:**
+**Descargar requisitos:**
 ```bash
 pip install pytest requests locust ruff django
 ```
@@ -573,28 +573,38 @@ pip install pytest requests locust ruff django
 python run_qa_suite.py --type all
 ```
 
-### 📋 Tipos de Pruebas
+### Tipos de Pruebas
+A continuación se muestra la lista detallada de los distintos tipos de pruebas, además de su comando de ejecución para correr cada test individualmente. 
 
-#### 🏗️ Unit Testing
+#### Unit Testin
 Pruebas de la clase `LeadMetrics`.
+*Nota:* Actualmente esta prueba solo corre la clase `LeadMetrics`, sin embargo se puede agregar y/o agregar diferentes clases ya implementadas agregando la importación de la clase al archivo  `test_lead_metrics.py` ubicado en `test/unit`.
+
+**Comando de Ejecución**
 ```bash
 python run_qa_suite.py --type unit
 ```
 
-#### 🌐 REST API Testing
+#### REST API Testing
 Prueba endpoints `/api/health` y `/api/lead-metrics`. Requiere servidor Django activo.
+
+**Comando de Ejecución**
 ```bash
 python run_qa_suite.py --type api
 ```
 
-#### 🤖 MCP Server Testing
+#### MCP Server Testing
 Prueba del servidor MCP via JSON-RPC. Requiere contenedores Docker activos (`docker-compose up -d`).
+
+**Comando de Ejecución**
 ```bash
 python run_qa_suite.py --type mcp
 ```
 
-#### � Security Testing
+#### Security Testing
 Valida permisos grant (acceso permitido) y deny (acceso denegado) en el endpoint `/api/admin/stats`.
+
+**Comando de Ejecución**
 ```bash
 python run_qa_suite.py --type security
 ```
@@ -611,19 +621,21 @@ python run_qa_suite.py --type security
 - Readonly: `readonly-key-67890` (permisos: read)
 
 
-#### �🛠️ Linter (Ruff)
+#### Linter (Ruff)
+
+**Comando de Ejecución**
 ```bash
 python -m ruff check .        # Revisar
 python -m ruff check --fix .  # Corregir automáticamente
 ```
 
-### 🦗 Stress Testing Distribuido (Locust + Docker)
+### Stress Testing Distribuido (Locust + Docker)
 
-**Arquitectura:**
+**Diagrama de Arquitectura:**
 ```
 ┌─────────────────┐
-│   Tu PC         │
-│  (Master)       │ ← Interfaz Web (localhost:8089)
+│    PC Local     │
+│    (Master)     │ ← Interfaz Web (localhost:8089)
 └────────┬────────┘
          │
     ┌────┴────┐
@@ -631,22 +643,28 @@ python -m ruff check --fix .  # Corregir automáticamente
 │Worker1│ │Worker2│  ← Contenedores Docker
 └───┬───┘ └──┬────┘
     └────┬───┘
-    ┌────▼────────┐
-    │  Django API │ ← localhost:8000
-    └─────────────┘
+┌────────▼────────┐
+│    Django API   │ ← localhost:8000
+└─────────────────┘
 ```
 
 **Paso 1: Iniciar Master**
+
+**Comando de Ejecución**
 ```bash
 python -m locust -f tests/stress/locustfile.py --master
 ```
 
 **Paso 2: Obtener tu IP local**
+
+**Comando de Ejecución**
 ```powershell
 ipconfig
 ```
 
 **Paso 3: Crear Worker en Docker**
+
+**Comando de Ejecución**
 ```bash
 docker run --rm -v ${PWD}/tests/stress:/locust locustio/locust:latest -f /locust/locustfile.py --worker --master-host=<TU_IP>
 ```
@@ -655,6 +673,8 @@ docker run --rm -v ${PWD}/tests/stress:/locust locustio/locust:latest -f /locust
 http://localhost:8089
 
 **Workers en otra computadora:**
+
+**Comando de Ejecución**
 ```bash
 docker run --rm -v /ruta/tests/stress:/locust locustio/locust:latest -f /locust/locustfile.py --worker --master-host=<IP_MASTER>
 ```
