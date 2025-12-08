@@ -311,7 +311,8 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 
 
 ## Big Pic
-![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)(/diagrams/Caso2-Entregable2.pdf)
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)
+*Nota:* Si necesita ver el diagrama con mas detalle, dentro de la carpeta `diagrams` se encuentra un pdf con este mismo diagrama. 
 
 
 ## Link a Miro 
