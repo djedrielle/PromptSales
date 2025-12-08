@@ -331,7 +331,7 @@ Se definieron los siguientes motores de base de datos:
 - **PromptContent:** MongoDB
 
 ### Base de datos de PromptCrm 
-![PromptCRM Database Diagram](/diagrams/PromptCrmDB.png)
+![PromptCRM Database Diagram]()
 
 Script de creacion: [PromptCRM](/DBCreationScripts/PromptCRM_CreationScript.sql)
 
