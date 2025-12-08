@@ -548,3 +548,121 @@ jobs:
 Para el mantenimiento y deploy de migrations en ambos motores (SQL Server y MongoDB) se va a utilizar [AWS DMS](https://docs.aws.amazon.com/es_es/dms/latest/userguide/Welcome.html).
 
 Este servicio permite mover datos, aplicar cambios incrementales y ejecutar actualizaciones controladas entre ambientes sin afectar la operación.
+
+---
+
+## 🧪 Testing & QA Suite
+
+Esta sección documenta la batería de pruebas del proyecto PromptSales.
+
+### 📂 Estructura de Tests
+
+```
+tests/
+├── unit/       # Pruebas de lógica de negocio (LeadMetrics)
+├── api/        # Pruebas de integración REST API
+├── stress/     # Pruebas de carga distribuidas (Locust)
+└── mcp/        # Pruebas del servidor MCP (JSON-RPC)
+```
+
+### 🚀 Inicio Rápido
+
+**Requisitos:**
+```bash
+pip install pytest requests locust ruff django
+```
+
+**Ejecutar todas las pruebas:**
+```bash
+python run_qa_suite.py --type all
+```
+
+### 📋 Tipos de Pruebas
+
+#### 🏗️ Unit Testing
+Pruebas de la clase `LeadMetrics`.
+```bash
+python run_qa_suite.py --type unit
+```
+
+#### 🌐 REST API Testing
+Prueba endpoints `/api/health` y `/api/lead-metrics`. Requiere servidor Django activo.
+```bash
+python run_qa_suite.py --type api
+```
+
+#### 🤖 MCP Server Testing
+Prueba del servidor MCP via JSON-RPC. Requiere contenedores Docker activos (`docker-compose up -d`).
+```bash
+python run_qa_suite.py --type mcp
+```
+
+#### � Security Testing
+Valida permisos grant (acceso permitido) y deny (acceso denegado) en el endpoint `/api/admin/stats`.
+```bash
+python run_qa_suite.py --type security
+```
+
+**Tests incluidos:**
+- ❌ Sin autenticación → 401
+- ❌ API key inválida → 403
+- ❌ Permisos insuficientes (readonly) → 403
+- ✅ Admin válido → 200 (access granted)
+- ❌ Formato de auth inválido → 401
+
+**API Keys de prueba:**
+- Admin: `admin-key-12345` (permisos: read, write, delete)
+- Readonly: `readonly-key-67890` (permisos: read)
+
+
+#### �🛠️ Linter (Ruff)
+```bash
+python -m ruff check .        # Revisar
+python -m ruff check --fix .  # Corregir automáticamente
+```
+
+### 🦗 Stress Testing Distribuido (Locust + Docker)
+
+**Arquitectura:**
+```
+┌─────────────────┐
+│   Tu PC         │
+│  (Master)       │ ← Interfaz Web (localhost:8089)
+└────────┬────────┘
+         │
+    ┌────┴────┐
+┌───▼───┐ ┌──▼────┐
+│Worker1│ │Worker2│  ← Contenedores Docker
+└───┬───┘ └──┬────┘
+    └────┬───┘
+    ┌────▼────────┐
+    │  Django API │ ← localhost:8000
+    └─────────────┘
+```
+
+**Paso 1: Iniciar Master**
+```bash
+python -m locust -f tests/stress/locustfile.py --master
+```
+
+**Paso 2: Obtener tu IP local**
+```powershell
+ipconfig
+```
+
+**Paso 3: Crear Worker en Docker**
+```bash
+docker run --rm -v ${PWD}/tests/stress:/locust locustio/locust:latest -f /locust/locustfile.py --worker --master-host=<TU_IP>
+```
+
+**Paso 4: Abrir interfaz web**
+http://localhost:8089
+
+**Workers en otra computadora:**
+```bash
+docker run --rm -v /ruta/tests/stress:/locust locustio/locust:latest -f /locust/locustfile.py --worker --master-host=<IP_MASTER>
+```
+
+**Troubleshooting:**
+- Workers no conectan: Verificar firewall (puerto 5557), usar IP correcta
+- Django desde Docker: Usar `http://host.docker.internal:8000` (Windows/Mac)

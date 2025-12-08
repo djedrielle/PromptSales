@@ -23,7 +23,7 @@ def run_command(command, description):
 
 def main():
     parser = argparse.ArgumentParser(description="PromptSales QA Suite Runner")
-    parser.add_argument('--type', choices=['unit', 'api', 'stress', 'mcp', 'lint', 'all'], default='all', help='Tipo de prueba a ejecutar')
+    parser.add_argument('--type', choices=['unit', 'api', 'security', 'stress', 'mcp', 'lint', 'all'], default='all', help='Tipo de prueba a ejecutar')
     
     args = parser.parse_args()
     
@@ -49,13 +49,21 @@ def main():
             # No marcamos success=False estricto porque depende del server
             print("ℹ️  (Si fallaron por conexión, asegúrate de levantar el server)")
 
-    # 4. MCP Test
+    # 4. Security Tests (Requiere servidor corriendo)
+    if args.type in ['security', 'all']:
+        print("\n🔐 Ejecutando Tests de Seguridad (permisos grant/deny)")
+        print("⚠️  Nota: Requiere que el servidor Django esté corriendo en localhost:8000")
+        cmd = f"{sys.executable} tests/security/test_permissions.py"
+        if not run_command(cmd, "Security Tests (Permisos)"):
+            print("ℹ️  (Si fallaron por conexión, asegúrate de levantar el server)")
+
+    # 5. MCP Test
     if args.type in ['mcp', 'all']:
         cmd = f"{sys.executable} tests/mcp/test_mcp_integration.py"
         if not run_command(cmd, "MCP Server Integration Test"):
             success = False
 
-    # 5. Stress Test (Solo check dry-run)
+    # 6. Stress Test (Solo check dry-run)
     if args.type in ['stress', 'all']:
         print("\n⚠️  Nota: Stress Test se ejecuta mejor manualmente o en CI.")
         print("   Comando sugerido: python -m locust -f tests/stress/locustfile.py --headless -u 10 -r 2 -t 10s")

@@ -73,31 +73,45 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+#
+# Configuración dinámica por variable de entorno:
+# - Por defecto: SQL Server (para quienes tienen SQL Server instalado)
+# - Con USE_SQLITE=1: SQLite (desarrollo local sin dependencias)
+#
+# Uso:
+#   SQL Server (default): python manage.py runserver
+#   SQLite:               set USE_SQLITE=1 && python manage.py runserver
 
-# SQLite para desarrollo (no requiere instalación ni configuración)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+import os
 
-# Configuración original de SQL Server (comentada para referencia)
-DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": "PromptCrm",
-        "USER": "promptcrm_user",            
-        "PASSWORD": "123456",
-        "CONN_MAX_AGE": 60,     
-        "HOST": r"localhost\SQLEXPRESS",     
-        "PORT": "",                          
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",  
-            "extra_params": "TrustServerCertificate=yes",
-        },
+USE_SQLITE = os.environ.get('USE_SQLITE', '0') == '1'
+
+if USE_SQLITE:
+    # SQLite - desarrollo local sin dependencias
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    # SQL Server - para quienes tienen SQL Server instalado
+    DATABASES = {
+        "default": {
+            "ENGINE": "mssql",
+            "NAME": "PromptCrm",
+            "USER": "promptcrm_user",            
+            "PASSWORD": "123456",
+            "CONN_MAX_AGE": 60,     
+            "HOST": r"localhost\SQLEXPRESS",     
+            "PORT": "",                          
+            "OPTIONS": {
+                "driver": "ODBC Driver 17 for SQL Server",  
+                "extra_params": "TrustServerCertificate=yes",
+            },
+        }
+    }
+
 
 
 
