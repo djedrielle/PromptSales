@@ -311,15 +311,11 @@ GitFlow se usa solo para el ciclo de desarrollo (feature/, release/, hotfix/, ma
 
 
 ## Big Pic
-![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)
+![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20235717.png)(/diagrams/Caso2-Entregable2.pdf)
 
-
-
-## Otros Services relacionados al pub/sub model
-![DDD diagram](/diagrams/Captura%20de%20pantalla%202025-11-13%20184323.png)
 
 ## Link a Miro 
-https://miro.com/welcomeonboard/R1Z6NkY1clBwRHQ1allYbWRWMStuKyt4L3BGRFVyaFJ5WEd0aEdSdVhrdFkvZXAxR0REMExaODVLMlk4eHBJc0FzZWZFU3o3cUJGU0ppbGprdmNaeGNWSlE0U09TUnRlN0V4Wml6cmJzRnRnMUkyVmw2OHo2Vlc5SncrYldYd2p3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=516617271561
+https://miro.com/app/board/uXjVGeGyYPU=/?share_link_id=352487179618
 
 
 ## Diseño de base de datos
