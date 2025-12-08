@@ -611,11 +611,14 @@ python run_qa_suite.py --type security
 ```
 
 **Tests incluidos:**
-- ❌ Sin autenticación → 401
-- ❌ API key inválida → 403
-- ❌ Permisos insuficientes (readonly) → 403
-- ✅ Admin válido → 200 (access granted)
-- ❌ Formato de auth inválido → 401
+*Pruebas de fallas:*
+- Sin autenticación → 401
+- API key inválida → 403
+- Permisos insuficientes (readonly) → 403
+- Formato de auth inválido → 401
+
+*Prueba exitosa:*
+- Admin válido → 200 (access granted)
 
 **API Keys de prueba:**
 - Admin: `admin-key-12345` (permisos: read, write, delete)
