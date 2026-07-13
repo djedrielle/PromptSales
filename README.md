@@ -1,4 +1,5 @@
 # Prompt Sales Platform (Architectural Design)
+This repo proposes the design of the Prompt Sales *Dummy* Platform. Was designed as a project for *Software Design* class.
 ### Desarrollado por
 * Djedrielle Alexander
 * Sebastian Muñoz
